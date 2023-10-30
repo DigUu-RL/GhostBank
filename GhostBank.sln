@@ -1,0 +1,98 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34219.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 - Presentation", "01 - Presentation", "{8A855221-7DAC-45D5-A43F-7946A2426C57}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 - Application", "02 - Application", "{9ACBE445-E631-4E29-921C-EE1221CEC1A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 - Domain", "03 - Domain", "{950C5CEE-BFB9-4370-9625-84708FAE756F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 - Infrastructure", "04 - Infrastructure", "{545468A4-6462-403A-8951-347EC6999E00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05 - Integration", "05 - Integration", "{93A37EB4-1C65-4B8E-BD06-EF6A00D1830C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "06 - Test", "06 - Test", "{D238CCAB-C41B-4929-AAB8-A1CDCB9EFA54}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{E39F7850-983F-467A-8BEF-7348E0D042FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repository", "Repository", "{BB79DD0C-6ABE-482A-AD59-233B1D6759B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCutting", "CrossCutting", "{DCA759CB-C3B7-4FE3-8333-64D96C7EB938}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Web.API", "01 - Presentation\GhostBank.Web.API\GhostBank.Web.API.csproj", "{B744A50B-E962-4A76-84D6-2554935622C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Application", "02 - Application\GhostBank.Application\GhostBank.Application.csproj", "{A773F7AB-159C-4C0B-91C2-2AB59BE4590F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Domain", "03 - Domain\GhostBank.Domain\GhostBank.Domain.csproj", "{9AADC85B-70F8-4DCD-A26E-B93DED9DE58D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Infrastructure.CrossCutting", "04 - Infrastructure\CrossCutting\GhostBank.Infrastructure.CrossCutting\GhostBank.Infrastructure.CrossCutting.csproj", "{EBB5887A-2AFC-492F-96C4-6A2F8C81B12C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Infrastructure.Data", "04 - Infrastructure\Data\GhostBank.Infrastructure.Data\GhostBank.Infrastructure.Data.csproj", "{8C890B5D-9073-4DA4-8FDE-9814CF337F2D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Infrastructure.Repository", "04 - Infrastructure\Repository\GhostBank.Infrastructure.Repository\GhostBank.Infrastructure.Repository.csproj", "{B46A4269-2D27-4692-B99B-2AAC5C0F3C45}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Integration", "05 - Integration\GhostBank.Integration\GhostBank.Integration.csproj", "{1810CB33-57A7-4CEF-866F-2F7E4C396F30}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Test", "06 - Test\GhostBank.Test\GhostBank.Test.csproj", "{E1145C22-B542-42CA-AFFE-735738C4BEB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B744A50B-E962-4A76-84D6-2554935622C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B744A50B-E962-4A76-84D6-2554935622C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B744A50B-E962-4A76-84D6-2554935622C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B744A50B-E962-4A76-84D6-2554935622C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A773F7AB-159C-4C0B-91C2-2AB59BE4590F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A773F7AB-159C-4C0B-91C2-2AB59BE4590F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A773F7AB-159C-4C0B-91C2-2AB59BE4590F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A773F7AB-159C-4C0B-91C2-2AB59BE4590F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AADC85B-70F8-4DCD-A26E-B93DED9DE58D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AADC85B-70F8-4DCD-A26E-B93DED9DE58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AADC85B-70F8-4DCD-A26E-B93DED9DE58D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AADC85B-70F8-4DCD-A26E-B93DED9DE58D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBB5887A-2AFC-492F-96C4-6A2F8C81B12C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBB5887A-2AFC-492F-96C4-6A2F8C81B12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBB5887A-2AFC-492F-96C4-6A2F8C81B12C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBB5887A-2AFC-492F-96C4-6A2F8C81B12C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C890B5D-9073-4DA4-8FDE-9814CF337F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C890B5D-9073-4DA4-8FDE-9814CF337F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C890B5D-9073-4DA4-8FDE-9814CF337F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C890B5D-9073-4DA4-8FDE-9814CF337F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B46A4269-2D27-4692-B99B-2AAC5C0F3C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B46A4269-2D27-4692-B99B-2AAC5C0F3C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B46A4269-2D27-4692-B99B-2AAC5C0F3C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B46A4269-2D27-4692-B99B-2AAC5C0F3C45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1810CB33-57A7-4CEF-866F-2F7E4C396F30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1810CB33-57A7-4CEF-866F-2F7E4C396F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1810CB33-57A7-4CEF-866F-2F7E4C396F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1810CB33-57A7-4CEF-866F-2F7E4C396F30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1145C22-B542-42CA-AFFE-735738C4BEB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1145C22-B542-42CA-AFFE-735738C4BEB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1145C22-B542-42CA-AFFE-735738C4BEB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1145C22-B542-42CA-AFFE-735738C4BEB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E39F7850-983F-467A-8BEF-7348E0D042FF} = {545468A4-6462-403A-8951-347EC6999E00}
+		{BB79DD0C-6ABE-482A-AD59-233B1D6759B9} = {545468A4-6462-403A-8951-347EC6999E00}
+		{DCA759CB-C3B7-4FE3-8333-64D96C7EB938} = {545468A4-6462-403A-8951-347EC6999E00}
+		{B744A50B-E962-4A76-84D6-2554935622C3} = {8A855221-7DAC-45D5-A43F-7946A2426C57}
+		{A773F7AB-159C-4C0B-91C2-2AB59BE4590F} = {9ACBE445-E631-4E29-921C-EE1221CEC1A9}
+		{9AADC85B-70F8-4DCD-A26E-B93DED9DE58D} = {950C5CEE-BFB9-4370-9625-84708FAE756F}
+		{EBB5887A-2AFC-492F-96C4-6A2F8C81B12C} = {DCA759CB-C3B7-4FE3-8333-64D96C7EB938}
+		{8C890B5D-9073-4DA4-8FDE-9814CF337F2D} = {E39F7850-983F-467A-8BEF-7348E0D042FF}
+		{B46A4269-2D27-4692-B99B-2AAC5C0F3C45} = {BB79DD0C-6ABE-482A-AD59-233B1D6759B9}
+		{1810CB33-57A7-4CEF-866F-2F7E4C396F30} = {93A37EB4-1C65-4B8E-BD06-EF6A00D1830C}
+		{E1145C22-B542-42CA-AFFE-735738C4BEB7} = {D238CCAB-C41B-4929-AAB8-A1CDCB9EFA54}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08007FAF-827B-44C9-9A2E-4F01E3DE654B}
+	EndGlobalSection
+EndGlobal
