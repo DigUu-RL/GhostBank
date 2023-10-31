@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\GhostBank.Infrastructure.Data\GhostBank.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
 </Project>
