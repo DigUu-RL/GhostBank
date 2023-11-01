@@ -37,6 +37,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Integration", "05
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Test", "06 - Test\GhostBank.Test\GhostBank.Test.csproj", "{E1145C22-B542-42CA-AFFE-735738C4BEB7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Middleware", "Middleware", "{0E51CD6D-7488-4F1C-9BBE-50774E6E53AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Infrastructure.Middleware", "04 - Infrastructure\Middleware\GhostBank.Infrastructure.Middleware\GhostBank.Infrastructure.Middleware.csproj", "{89DF8250-2790-4B4C-A749-59287ED60C95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +79,10 @@ Global
 		{E1145C22-B542-42CA-AFFE-735738C4BEB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1145C22-B542-42CA-AFFE-735738C4BEB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1145C22-B542-42CA-AFFE-735738C4BEB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89DF8250-2790-4B4C-A749-59287ED60C95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89DF8250-2790-4B4C-A749-59287ED60C95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89DF8250-2790-4B4C-A749-59287ED60C95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89DF8250-2790-4B4C-A749-59287ED60C95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +99,8 @@ Global
 		{B46A4269-2D27-4692-B99B-2AAC5C0F3C45} = {BB79DD0C-6ABE-482A-AD59-233B1D6759B9}
 		{1810CB33-57A7-4CEF-866F-2F7E4C396F30} = {93A37EB4-1C65-4B8E-BD06-EF6A00D1830C}
 		{E1145C22-B542-42CA-AFFE-735738C4BEB7} = {D238CCAB-C41B-4929-AAB8-A1CDCB9EFA54}
+		{0E51CD6D-7488-4F1C-9BBE-50774E6E53AC} = {545468A4-6462-403A-8951-347EC6999E00}
+		{89DF8250-2790-4B4C-A749-59287ED60C95} = {0E51CD6D-7488-4F1C-9BBE-50774E6E53AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {08007FAF-827B-44C9-9A2E-4F01E3DE654B}

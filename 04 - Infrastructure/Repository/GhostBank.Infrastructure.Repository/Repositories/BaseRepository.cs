@@ -2,56 +2,74 @@
 using GhostBank.Infrastructure.Data.Entities;
 using GhostBank.Infrastructure.Repository.Interfaces;
 using GhostBank.Infrastructure.Repository.Specifications;
+using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace GhostBank.Infrastructure.Repository.Repositories;
 
-public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository<TEntity> where TEntity : EntityBase
+public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository<GhostBankContext, TEntity> where TEntity : EntityBase
 {
-	public DbContext Context { get; } = context ?? throw new ArgumentNullException(nameof(context));
+	public GhostBankContext Context { get; } = context;
+	public IDbContextTransaction Transaction { get; } = context.Database.BeginTransaction();
+	public DbSet<TEntity> Entity { get; } = context.Set<TEntity>();
 
-	public Task CommitAsync()
+	public async Task<TEntity?> GetByIdAsync(Guid id)
 	{
-		throw new NotImplementedException();
+		TEntity? entity = await Context.FindAsync<TEntity>(id);
+		return entity;
 	}
 
-	public Task CreateAsync(TEntity entity)
+	public async Task<List<TEntity>> GetAllAsync()
 	{
-		throw new NotImplementedException();
+		return await Entity.ToListAsync();
 	}
 
-	public Task CreateOrUpdateAsync(TEntity entity)
+	public async Task<List<TEntity>> GetAsync(Specification<TEntity>? specification = null)
 	{
-		throw new NotImplementedException();
+		specification ??= new TrueSpecification<TEntity>();
+		specification &= new ExpressionSpecification<TEntity>(x => !x.Excluded);
+
+		return await Entity.Where(specification).ToListAsync();
 	}
 
-	public Task DeleteAsync(TEntity entity)
+	public async Task<List<TEntity>> GetWithExcluded(Specification<TEntity>? specification = null)
 	{
-		throw new NotImplementedException();
+		specification ??= new TrueSpecification<TEntity>();
+		return await Entity.Where(specification).ToListAsync();
 	}
 
-	public Task<IEnumerable<TEntity>> GetAllAsync()
+	public async Task CreateAsync(TEntity entity)
 	{
-		throw new NotImplementedException();
-	}
-
-	public Task<IEnumerable<TEntity>> GetAsync(Specification<TEntity>? specification = null)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<TEntity> GetByIdAsync(Guid id)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task RollbackAsync()
-	{
-		throw new NotImplementedException();
+		await Entity.AddAsync(entity);
 	}
 
 	public Task UpdateAsync(TEntity entity)
 	{
-		throw new NotImplementedException();
+		Entity.Update(entity);
+		return Task.CompletedTask;
+	}
+
+	public async Task CreateOrUpdateAsync(TEntity entity)
+	{
+		Task task = entity.Id.Equals(Guid.Empty) ? CreateAsync(entity) : UpdateAsync(entity);
+		await task;
+	}
+
+	public Task DeleteAsync(TEntity entity)
+	{
+		Entity.Remove(entity);
+		return Task.CompletedTask;
+	}
+
+	public async Task CommitAsync()
+	{
+		await Context.SaveChangesAsync();
+		await Transaction.CommitAsync();
+	}
+
+	public async Task RollbackAsync()
+	{
+		await Transaction.RollbackAsync();
 	}
 }
