@@ -1,5 +1,8 @@
-﻿namespace GhostBank.Domain.Interfaces;
+﻿using GhostBank.Domain.Models;
+using GhostBank.Domain.Requests;
 
-public interface IDomainUserService
+namespace GhostBank.Domain.Interfaces;
+
+public interface IDomainUserService : IDomainServiceBase<UserModel, UserRequest>
 {
 }

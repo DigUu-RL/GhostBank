@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\03 - Domain\GhostBank.Domain\GhostBank.Domain.csproj" />
+    <ProjectReference Include="..\..\04 - Infrastructure\Middleware\GhostBank.Infrastructure.Middleware\GhostBank.Infrastructure.Middleware.csproj" />
+  </ItemGroup>
+
 </Project>

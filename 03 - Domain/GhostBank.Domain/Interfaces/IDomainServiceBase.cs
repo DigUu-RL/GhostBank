@@ -1,12 +1,15 @@
-﻿namespace GhostBank.Domain.Interfaces;
+﻿using GhostBank.Domain.Helpers;
+using GhostBank.Domain.Models;
 
-public interface IDomainServiceBase<TModel>
+namespace GhostBank.Domain.Interfaces;
+
+public interface IDomainServiceBase<TModel, TRequest> where TRequest : class
 {
-	//Task<TModel?> GetByIdAsync(Guid id);
-	//Task<List<TModel>> GetAllAsync();
-	//Task<PaginatedList<TModel>> GetAsync(int page, int quantity, Specification<TModel>? specification = null);
-	//Task<PaginatedList<TModel>> GetWithExcluded(int page, int quantity, Specification<TModel>? specification = null);
-	//Task CreateAsync(TModel entity);
-	//Task UpdateAsync(TModel entity);
-	//Task DeleteAsync(TModel entity);
+	Task<TModel> GetByIdAsync(Guid id);
+	Task<List<TModel>> GetAllAsync();
+	Task<PaginatedListModel<TModel>> GetAsync(Search<TRequest> search);
+	Task<PaginatedListModel<TModel>> GetWithExcludedAsync(Search<TRequest> search);
+	Task CreateAsync(TRequest model);
+	Task UpdateAsync(TRequest model);
+	Task DeleteAsync(Guid id);
 }

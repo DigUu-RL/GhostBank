@@ -17,7 +17,7 @@ public interface IBaseRepository<TContext, TEntity> : IUnitOfWork
 	Task<TEntity?> GetByIdAsync(Guid id);
 	Task<List<TEntity>> GetAllAsync();
 	Task<PaginatedList<TEntity>> GetAsync(int page, int quantity, Specification<TEntity>? specification = null);
-	Task<PaginatedList<TEntity>> GetWithExcluded(int page, int quantity, Specification<TEntity>? specification = null);
+	Task<PaginatedList<TEntity>> GetWithExcludedAsync(int page, int quantity, Specification<TEntity>? specification = null);
 	Task CreateAsync(TEntity entity);
 	Task UpdateAsync(TEntity entity);
 	Task CreateOrUpdateAsync(TEntity entity);

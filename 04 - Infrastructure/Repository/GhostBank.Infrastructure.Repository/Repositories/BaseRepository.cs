@@ -34,7 +34,7 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 		return await PaginatedList<TEntity>.CreateInstanceAsync(items, page, quantity);
 	}
 
-	public virtual async Task<PaginatedList<TEntity>> GetWithExcluded(int page, int quantity, Specification<TEntity>? specification = null)
+	public virtual async Task<PaginatedList<TEntity>> GetWithExcludedAsync(int page, int quantity, Specification<TEntity>? specification = null)
 	{
 		specification ??= new TrueSpecification<TEntity>();
 		specification &= new ExpressionSpecification<TEntity>(x => !x.Excluded);

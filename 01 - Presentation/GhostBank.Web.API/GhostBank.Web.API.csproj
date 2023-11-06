@@ -14,4 +14,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\02 - Application\GhostBank.Application\GhostBank.Application.csproj" />
+    <ProjectReference Include="..\..\03 - Domain\GhostBank.Domain\GhostBank.Domain.csproj" />
+    <ProjectReference Include="..\..\04 - Infrastructure\Data\GhostBank.Infrastructure.Data\GhostBank.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
 </Project>
