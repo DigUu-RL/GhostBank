@@ -1,25 +1,20 @@
 ﻿using GhostBank.Infrastructure.Data.Entities;
 using GhostBank.Infrastructure.Repository.Helpers;
 using GhostBank.Infrastructure.Repository.Specifications;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Linq.Expressions;
 
 namespace GhostBank.Infrastructure.Repository.Interfaces;
 
-public interface IBaseRepository<TContext, TEntity> : IUnitOfWork
-	where TContext : DbContext
-	where TEntity : EntityBase
+public interface IBaseRepository<TEntity> : IUnitOfWork where TEntity : EntityBase
 {
-	TContext Context { get; }
-	IDbContextTransaction Transaction { get; }
-	DbSet<TEntity> Entity { get; }
-
+	void Include<TProperty>(Expression<Func<TEntity, TProperty>> expression);
+	IQueryable<TEntity> Query(Specification<TEntity>? specification = null);
 	Task<TEntity?> GetByIdAsync(Guid id);
 	Task<List<TEntity>> GetAllAsync();
 	Task<PaginatedList<TEntity>> GetAsync(int page, int quantity, Specification<TEntity>? specification = null);
 	Task<PaginatedList<TEntity>> GetWithExcludedAsync(int page, int quantity, Specification<TEntity>? specification = null);
-	Task CreateAsync(TEntity entity);
-	Task UpdateAsync(TEntity entity);
+	Task CreateAsync(params TEntity[] entities);
+	Task UpdateAsync(params TEntity[] entities);
 	Task CreateOrUpdateAsync(TEntity entity);
 	Task DeleteAsync(TEntity entity);
 }

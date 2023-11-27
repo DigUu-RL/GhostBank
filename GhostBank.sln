@@ -41,6 +41,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Middleware", "Middleware", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhostBank.Infrastructure.Middleware", "04 - Infrastructure\Middleware\GhostBank.Infrastructure.Middleware\GhostBank.Infrastructure.Middleware.csproj", "{89DF8250-2790-4B4C-A749-59287ED60C95}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "07 - Solution Items", "07 - Solution Items", "{AA9CC4A8-4E7A-419C-AEA2-A5CC7F70ADB8}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

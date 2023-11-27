@@ -1,12 +1,18 @@
-﻿using GhostBank.Application.DTOs;
+﻿using Asp.Versioning;
+using GhostBank.Application.DTOs;
 using GhostBank.Application.Interface;
 using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Requests;
 using GhostBank.Web.API.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GhostBank.Web.API.V1;
 
+[Authorize]
+[ApiController]
+[ApiVersion("1.0")]
+[Route("/api/v{version:apiVersion}/[controller]")]
 public class UserController(IApplicationUserService userService) : BaseController<UserRequest>
 {
 	private readonly IApplicationUserService _userService = userService;
@@ -19,39 +25,45 @@ public class UserController(IApplicationUserService userService) : BaseControlle
 	}
 
 	[HttpGet("/all")]
-	public override Task<IActionResult> GetAll()
+	public override async Task<IActionResult> GetAll()
 	{
-		throw new NotImplementedException();
+		List<UserDTO> users = await _userService.GetAllAsync();
+		return Ok(users);
 	}
 
 	[HttpGet("/list")]
-	public override Task<IActionResult> Get([FromQuery] Search<UserRequest> search)
+	public override async Task<IActionResult> Get([FromQuery] Search<UserRequest> search)
 	{
-		throw new NotImplementedException();
+		PaginatedListDTO<UserDTO> users = await _userService.GetAsync(search);
+		return Ok(users);
 	}
 
 	[HttpGet("/excluded")]
-	public override Task<IActionResult> GetWithExcluded([FromQuery] Search<UserRequest> search)
+	public override async Task<IActionResult> GetWithExcluded([FromQuery] Search<UserRequest> search)
 	{
-		throw new NotImplementedException();
+		PaginatedListDTO<UserDTO> users = await _userService.GetWithExcludedAsync(search);
+		return Ok(users);
 	}
 
 	[HttpPost("/create")]
-	public override Task<IActionResult> Create([FromBody] UserRequest request)
+	public override async Task<IActionResult> Create([FromBody] UserRequest request)
 	{
-		throw new NotImplementedException();
+		await _userService.CreateAsync(request);
+		return Created();
 	}
 
 
 	[HttpPut("/update")]
-	public override Task<IActionResult> Update([FromBody] UserRequest request)
+	public override async Task<IActionResult> Update([FromBody] UserRequest request)
 	{
-		throw new NotImplementedException();
+		await _userService.UpdateAsync(request);
+		return NoContent();
 	}
 
 	[HttpDelete("/delete")]
-	public override Task<IActionResult> Delete(Guid id)
+	public override async Task<IActionResult> Delete(Guid id)
 	{
-		throw new NotImplementedException();
+		await _userService.DeleteAsync(id);
+		return NoContent();
 	}
 }

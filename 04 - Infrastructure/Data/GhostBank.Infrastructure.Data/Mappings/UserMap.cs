@@ -4,20 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GhostBank.Infrastructure.Data.Mappings;
 
-public class UserMap : IEntityTypeConfiguration<User>
+public class UserMap : BaseMap<User>
 {
-	public void Configure(EntityTypeBuilder<User> builder)
+	public override void Configure(EntityTypeBuilder<User> builder)
 	{
-		builder.ToTable(nameof(User));
-		builder.HasKey(x => x.Id);
+		base.Configure(builder);
 
-		builder
-			.HasIndex(x => x.Email)
-			.IsUnique();
+		builder.ToTable(nameof(User));
 
 		builder
 			.Property(x => x.Id)
-			.HasColumnType("GUID")
 			.IsRequired()
 			.ValueGeneratedOnAdd();
 
@@ -34,6 +30,12 @@ public class UserMap : IEntityTypeConfiguration<User>
 			.IsRequired();
 
 		builder
+			.Property(x => x.UserName)
+			.HasColumnType("VARCHAR")
+			.HasMaxLength(255)
+			.IsRequired();
+
+		builder
 			.Property(x => x.Email)
 			.HasColumnType("VARCHAR")
 			.HasMaxLength(255)
@@ -44,5 +46,24 @@ public class UserMap : IEntityTypeConfiguration<User>
 			.HasColumnType("VARCHAR")
 			.HasMaxLength(255)
 			.IsRequired();
+
+		builder
+			.Property(x => x.Role)
+			.HasColumnType("VARCHAR")
+			.HasMaxLength(255)
+			.IsRequired();
+
+		builder
+			.HasIndex(x => x.UserName)
+			.IsUnique();
+
+		builder
+			.HasIndex(x => x.Email)
+			.IsUnique();
+
+		builder
+			.HasMany(x => x.Claims)
+			.WithOne(x => x.User)
+			.OnDelete(DeleteBehavior.ClientCascade);
 	}
 }

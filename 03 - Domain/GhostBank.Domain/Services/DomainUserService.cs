@@ -9,12 +9,14 @@ using GhostBank.Infrastructure.Repository.Interfaces;
 using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;
+using System.Security.Claims;
 
 namespace GhostBank.Domain.Services;
 
-public class DomainUserService(IUserRepository userRepository) : IDomainUserService
+public class DomainUserService(IUserRepository userRepository, IUserClaimRepository userClaimRepository) : IDomainUserService
 {
 	private readonly IUserRepository _userRepository = userRepository;
+	private readonly IUserClaimRepository _userClaimRepository = userClaimRepository;
 
 	public async Task<UserModel> GetByIdAsync(Guid id)
 	{
@@ -62,36 +64,70 @@ public class DomainUserService(IUserRepository userRepository) : IDomainUserServ
 		{
 			FirstName = model.FirstName!,
 			LastName = model.LastName!,
+			UserName = model.UserName!,
 			Email = model.Email!,
-			Roles = model.Roles
+			Role = model.Role,
+			Password = await Util.CreateHashAsync(model.Password!)
 		};
-
-		string combine = model.Password + model.Email;
-		user.Password = await Util.CreateHashAsync(combine);
 
 		await _userRepository.CreateAsync(user);
 		await _userRepository.CommitAsync();
+
+		var claims = new List<UserClaim> 
+		{
+			new(ClaimTypes.Name, user.UserName),
+			new(ClaimTypes.Email, user.Email),
+			new(ClaimTypes.Role, user.Role.ToString())
+		};
+
+		claims.ForEach(x => x.UserId = user.Id);
+
+		await _userClaimRepository.CreateAsync([.. claims]);
+		await _userClaimRepository.CommitAsync();
 	}
 
 	public async Task UpdateAsync(UserRequest model)
 	{
-		User? user = await _userRepository.GetByIdAsync(model.Id) ?? throw new NotFoundException("Usuário não encontrado");
+		_userRepository.Include(x => x.Claims);
+
+		User? user = await _userRepository.GetByIdAsync(model.Id.GetValueOrDefault()) ?? throw new NotFoundException("Usuário não encontrado");
 
 		user.FirstName = model.FirstName!;
 		user.LastName = model.LastName!;
+		user.UserName = model.UserName!;
 		user.Email = model.Email!;
-		user.Roles = model.Roles;
+		user.Role = model.Role;
 
 		await _userRepository.UpdateAsync(user);
 		await _userRepository.CommitAsync();
+
+		var claims = new List<UserClaim>
+		{
+			new(ClaimTypes.Name, user.UserName),
+			new(ClaimTypes.Email, user.Email),
+			new(ClaimTypes.Role, user.Role.ToString()),
+		};
+
+		await _userClaimRepository.UpdateAsync(user.Id, [.. claims]);
+		await _userClaimRepository.CommitAsync();
 	}
 
 	public async Task DeleteAsync(Guid id)
 	{
-		User? user = await _userRepository.GetByIdAsync(id) ?? throw new NotFoundException("Usuário não encontrado");
+		User user = await _userRepository.GetByIdAsync(id) ?? throw new NotFoundException("Usuário não encontrado");
 
-		await _userRepository.DeleteAsync(user);
-		await _userRepository.CommitAsync();
+		try
+		{
+			await _userRepository.DeleteAsync(user);
+			await _userRepository.CommitAsync();
+		}
+		catch (Exception)
+		{
+			user.Excluded = true;
+
+			await _userRepository.UpdateAsync(user);
+			await _userRepository.CommitAsync();
+		}
 	}
 
 	private static Specification<User> GetSpecification(Search<UserRequest> search)
@@ -108,6 +144,9 @@ public class DomainUserService(IUserRepository userRepository) : IDomainUserServ
 
 			if (!string.IsNullOrEmpty(search.Filter.LastName))
 				specification &= UserSpecification.ByLastName(search.Filter.LastName);
+
+			if (!string.IsNullOrEmpty(search.Filter.UserName))
+				specification &= UserSpecification.ByUserName(search.Filter.UserName);
 
 			if (!string.IsNullOrEmpty(search.Filter.Email))
 				specification &= UserSpecification.ByEmail(search.Filter.Email);

@@ -5,4 +5,5 @@ namespace GhostBank.Domain.Interfaces;
 
 public interface IDomainUserService : IDomainServiceBase<UserModel, UserRequest>
 {
+
 }

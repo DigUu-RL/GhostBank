@@ -4,12 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <InvariantGlobalization>false</InvariantGlobalization>
     <UserSecretsId>a6397b4e-fa99-496b-8636-2a885ba7514a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
@@ -17,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\02 - Application\GhostBank.Application\GhostBank.Application.csproj" />
     <ProjectReference Include="..\..\03 - Domain\GhostBank.Domain\GhostBank.Domain.csproj" />
+    <ProjectReference Include="..\..\04 - Infrastructure\CrossCutting\GhostBank.Infrastructure.CrossCutting\GhostBank.Infrastructure.CrossCutting.csproj" />
     <ProjectReference Include="..\..\04 - Infrastructure\Data\GhostBank.Infrastructure.Data\GhostBank.Infrastructure.Data.csproj" />
   </ItemGroup>
 
