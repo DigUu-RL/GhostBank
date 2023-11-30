@@ -11,6 +11,7 @@ using GhostBank.Infrastructure.Repository.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -77,9 +78,9 @@ public static class ConfigureServiceCollection
 					ValidIssuer = issuer,
 					IssuerSigningKey = new SymmetricSecurityKey(key)
 				};
-
-				Console.WriteLine("Starting configuration JWT Bearer Authorization...");
 			});
+
+		Console.WriteLine("Configuration JWT Bearer Authorization finished");
 
 		services.AddSwaggerGen(options =>
 		{
@@ -115,12 +116,22 @@ public static class ConfigureServiceCollection
 			});
 		});
 
-		services.AddApiVersioning(options =>
-		{
-			options.DefaultApiVersion = new ApiVersion(1);
-			options.AssumeDefaultVersionWhenUnspecified = true;
-			options.ReportApiVersions = true;
-		});
+		Console.WriteLine("Starting configuration API versioning...");
+
+		services
+			.AddApiVersioning(x => 
+			{
+				x.DefaultApiVersion = new ApiVersion(1);
+				x.AssumeDefaultVersionWhenUnspecified = true;
+				x.ReportApiVersions = true;
+				x.ApiVersionReader = ApiVersionReader.Combine(new HeaderApiVersionReader("x-version"));
+			}).AddApiExplorer(x =>
+			{
+				x.GroupNameFormat = "'v'VVV";
+				x.SubstituteApiVersionInUrl = true;
+			});
+
+		Console.WriteLine("Configuration API versioning finished");
 
 		Console.WriteLine("Configuration services finished");
 

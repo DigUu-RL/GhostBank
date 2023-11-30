@@ -12,7 +12,7 @@ namespace GhostBank.Web.API.V1;
 [Authorize]
 [ApiController]
 [ApiVersion(1)]
-[Route("api/v{version:apiVersion}/[controller]/")]
+[Route("api/[controller]/")]
 public class UserController(IApplicationUserService userService) : BaseController<UserRequest>
 {
 	private readonly IApplicationUserService _userService = userService;

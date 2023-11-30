@@ -9,7 +9,7 @@ namespace GhostBank.Web.API.V1;
 [ApiController]
 [ApiVersion(1)]
 [AllowAnonymous]
-[Route("api/v{version:apiVersion}/[controller]/")]
+[Route("api/[controller]/")]
 public class AuthenticationController(IApplicationAuthenticationService authenticationService) : Controller
 {
 	private readonly IApplicationAuthenticationService _authenticationService = authenticationService;
