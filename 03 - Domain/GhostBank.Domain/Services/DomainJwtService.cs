@@ -1,19 +1,20 @@
-﻿using GhostBank.Domain.Interfaces;
+﻿using GhostBank.Domain.Exceptions.Abstractions;
+using GhostBank.Domain.Interfaces;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Repository.Interfaces;
-using GhostBank.Infrastructure.Repository.Specifications.Contracts;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using GhostBank.Domain.Helpers.Extensions;
 
 namespace GhostBank.Domain.Services;
 
-public class DomainJwtService(IConfiguration configuration) : IDomainJwtService
+public class DomainJwtService(IConfiguration configuration, IUserRepository userRepository) : IDomainJwtService
 {
 	private readonly IConfigurationSection _jwtSection = configuration.GetSection("JWT");
+	private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 	private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
 	public string GenerateToken(User user)
@@ -28,11 +29,11 @@ public class DomainJwtService(IConfiguration configuration) : IDomainJwtService
 		{
 			new(JwtRegisteredClaimNames.Sub, subject),
 			new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-			new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+			new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.Ticks.ToString())
 		};
 
 		foreach (UserClaim claim in user.Claims)
-			claims.Add(new Claim(claim.Type, claim.Value));
+			claims.Add(claim);
 
 		var securityKey = new SymmetricSecurityKey(key);
 		var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -47,19 +48,23 @@ public class DomainJwtService(IConfiguration configuration) : IDomainJwtService
 		return _tokenHandler.WriteToken(token);
 	}
 
-	public void ValidateToken(string token)
+	public async Task<User> ValidateTokenAsync(string token)
 	{
-		byte[] key = Encoding.ASCII.GetBytes(_jwtSection.GetValue<string>("Key")!);
+		byte[] key = Encoding.UTF8.GetBytes(_jwtSection.GetValue<string>("Key")!);
 
-		_tokenHandler.ValidateToken(token, new TokenValidationParameters 
+		TokenValidationResult jwtToken = await _tokenHandler.ValidateTokenAsync(token, new TokenValidationParameters
 		{
 			ValidateIssuerSigningKey = true,
 			IssuerSigningKey = new SymmetricSecurityKey(key),
 			ValidateIssuer = false,
 			ValidateAudience = false,
 			ClockSkew = TimeSpan.Zero
-		}, out SecurityToken validatedToken);
+		});
 
-		_ = (JwtSecurityToken) validatedToken;
+		if (!jwtToken.IsValid)
+			throw new InvalidTokenException("Token inválido");
+
+		Guid userId = (jwtToken.Claims.Single(x => x.Key.Equals(nameof(User.Id))).Value as string).ToGuidOrEmpty();
+		return await _userRepository.GetByIdAsync(userId) ?? throw new NotFoundException("Usuário não encontrado");
 	}
 }

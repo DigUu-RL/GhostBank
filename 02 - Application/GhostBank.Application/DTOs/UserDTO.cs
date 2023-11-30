@@ -1,6 +1,6 @@
-﻿using GhostBank.Domain.Models;
+﻿using GhostBank.Domain.Attributes;
+using GhostBank.Domain.Models;
 using GhostBank.Infrastructure.Data.Enums;
-using GhostBank.Infrastructure.Middleware.Attributes;
 
 namespace GhostBank.Application.DTOs;
 

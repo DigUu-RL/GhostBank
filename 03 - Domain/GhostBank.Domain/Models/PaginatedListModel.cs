@@ -1,4 +1,4 @@
-﻿using GhostBank.Infrastructure.Middleware.Attributes;
+﻿using GhostBank.Domain.Attributes;
 
 namespace GhostBank.Domain.Models;
 

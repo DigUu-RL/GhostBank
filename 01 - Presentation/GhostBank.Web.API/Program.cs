@@ -1,11 +1,4 @@
 using GhostBank.Infrastructure.CrossCutting;
-using GhostBank.Infrastructure.Middleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +32,8 @@ app.UseCors(x =>
 	x.AllowAnyOrigin();
 });
 
-app.UseMiddleware(typeof(ExceptionHandlerMiddleware));
+app.AddMiddlewares();
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

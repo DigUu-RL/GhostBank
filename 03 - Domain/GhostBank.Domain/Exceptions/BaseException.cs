@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace GhostBank.Infrastructure.Middleware.Exceptions;
+namespace GhostBank.Domain.Exceptions;
 
 public class BaseException(string message, HttpStatusCode statusCode) : Exception(message)
 {

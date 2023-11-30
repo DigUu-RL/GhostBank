@@ -4,63 +4,62 @@ using GhostBank.Application.Interface;
 using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Requests;
 using GhostBank.Web.API.Controllers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AuthorizeAttribute = GhostBank.Domain.Attributes.AuthorizeAttribute;
 
 namespace GhostBank.Web.API.V1;
 
 [Authorize]
 [ApiController]
-[ApiVersion("1.0")]
-[Route("/api/v{version:apiVersion}/[controller]")]
+[ApiVersion(1)]
+[Route("api/v{version:apiVersion}/[controller]/")]
 public class UserController(IApplicationUserService userService) : BaseController<UserRequest>
 {
 	private readonly IApplicationUserService _userService = userService;
 
-	[HttpGet("/{id}")]
+	[HttpGet("{id}")]
 	public override async Task<IActionResult> GetById(Guid id)
 	{
 		UserDTO user = await _userService.GetByIdAsync(id);
 		return Ok(user);
 	}
 
-	[HttpGet("/all")]
+	[HttpGet("all")]
 	public override async Task<IActionResult> GetAll()
 	{
 		List<UserDTO> users = await _userService.GetAllAsync();
 		return Ok(users);
 	}
 
-	[HttpGet("/list")]
+	[HttpGet("list")]
 	public override async Task<IActionResult> Get([FromQuery] Search<UserRequest> search)
 	{
 		PaginatedListDTO<UserDTO> users = await _userService.GetAsync(search);
 		return Ok(users);
 	}
 
-	[HttpGet("/excluded")]
+	[HttpGet("excluded")]
 	public override async Task<IActionResult> GetWithExcluded([FromQuery] Search<UserRequest> search)
 	{
 		PaginatedListDTO<UserDTO> users = await _userService.GetWithExcludedAsync(search);
 		return Ok(users);
 	}
 
-	[HttpPost("/create")]
+	[HttpPost("create")]
 	public override async Task<IActionResult> Create([FromBody] UserRequest request)
 	{
 		await _userService.CreateAsync(request);
 		return Created();
 	}
 
-
-	[HttpPut("/update")]
+	[HttpPut("update")]
 	public override async Task<IActionResult> Update([FromBody] UserRequest request)
 	{
 		await _userService.UpdateAsync(request);
 		return NoContent();
 	}
 
-	[HttpDelete("/delete")]
+	[HttpDelete("delete/{id}")]
 	public override async Task<IActionResult> Delete(Guid id)
 	{
 		await _userService.DeleteAsync(id);

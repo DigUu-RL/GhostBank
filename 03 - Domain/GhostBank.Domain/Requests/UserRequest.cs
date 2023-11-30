@@ -1,13 +1,13 @@
-﻿using GhostBank.Infrastructure.Data.Enums;
-using GhostBank.Infrastructure.Middleware.Attributes;
+﻿using GhostBank.Domain.Attributes;
+using GhostBank.Infrastructure.Data.Enums;
 
 namespace GhostBank.Domain.Requests;
 
 [Request]
 public class UserRequest
 {
-    public Guid? Id { get; set; }
-    public string? FirstName { get; set; }
+	public Guid? Id { get; set; }
+	public string? FirstName { get; set; }
 	public string? LastName { get; set; }
 	public string? UserName { get; set; }
 	public string? Email { get; set; }

@@ -1,12 +1,16 @@
 ﻿using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using GhostBank.Application.Interface;
 using GhostBank.Application.Services;
 using GhostBank.Domain.Interfaces;
 using GhostBank.Domain.Services;
 using GhostBank.Infrastructure.Data.Contexts;
+using GhostBank.Infrastructure.Middleware;
 using GhostBank.Infrastructure.Repository.Interfaces;
 using GhostBank.Infrastructure.Repository.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +35,8 @@ public static class ConfigureServiceCollection
 
 		services.AddScoped(typeof(IApplicationAuthenticationService), typeof(ApplicationAuthenticationService));
 		services.AddScoped(typeof(IDomainAuthenticationService), typeof(DomainAuthenticationService));
+
+		services.AddScoped(typeof(IDomainJwtService), typeof(DomainJwtService));
 
 		services.AddScoped(typeof(IRepositoryWrapper), typeof(RepositoryWrapper));
 		services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
@@ -75,9 +81,11 @@ public static class ConfigureServiceCollection
 				Console.WriteLine("Starting configuration JWT Bearer Authorization...");
 			});
 
-		services.AddSwaggerGen(x => 
+		services.AddSwaggerGen(options =>
 		{
-			x.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+			options.CustomSchemaIds(x => x.FullName);
+
+			options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
 			{
 				Description =
 					"JWT Authorization Header - Utilizado com Bearer Authentication.\r\n\r\n" +
@@ -91,7 +99,7 @@ public static class ConfigureServiceCollection
 				BearerFormat = "JWT",
 			});
 
-			x.AddSecurityRequirement(new OpenApiSecurityRequirement
+			options.AddSecurityRequirement(new OpenApiSecurityRequirement
 			{
 				{
 					new OpenApiSecurityScheme
@@ -109,7 +117,7 @@ public static class ConfigureServiceCollection
 
 		services.AddApiVersioning(options =>
 		{
-			options.DefaultApiVersion = new ApiVersion(1, 0);
+			options.DefaultApiVersion = new ApiVersion(1);
 			options.AssumeDefaultVersionWhenUnspecified = true;
 			options.ReportApiVersions = true;
 		});
@@ -117,5 +125,17 @@ public static class ConfigureServiceCollection
 		Console.WriteLine("Configuration services finished");
 
 		return services;
+	}
+
+	public static IApplicationBuilder AddMiddlewares(this IApplicationBuilder builder)
+	{
+		Console.WriteLine("Starting add and configure middlewares...");
+
+		builder.UseMiddleware(typeof(ExceptionHandlerMiddleware));
+		builder.UseMiddleware(typeof(JwtMiddleware));
+
+		Console.WriteLine("Configuration of add and configure middlewares finished");
+
+		return builder;
 	}
 }

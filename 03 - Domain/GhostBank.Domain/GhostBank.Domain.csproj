@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\04 - Infrastructure\Data\GhostBank.Infrastructure.Data\GhostBank.Infrastructure.Data.csproj" />
-    <ProjectReference Include="..\..\04 - Infrastructure\Middleware\GhostBank.Infrastructure.Middleware\GhostBank.Infrastructure.Middleware.csproj" />
     <ProjectReference Include="..\..\04 - Infrastructure\Repository\GhostBank.Infrastructure.Repository\GhostBank.Infrastructure.Repository.csproj" />
   </ItemGroup>
 

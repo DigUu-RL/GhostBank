@@ -5,5 +5,5 @@ namespace GhostBank.Domain.Interfaces;
 public interface IDomainJwtService
 {
 	string GenerateToken(User user);
-	void ValidateToken(string token);
+	Task<User> ValidateTokenAsync(string token);
 }

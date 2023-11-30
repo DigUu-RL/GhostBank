@@ -6,7 +6,10 @@ namespace GhostBank.Web.API.Controllers;
 
 public abstract class BaseController<TRequest> : Controller where TRequest : class
 {
-	protected new User? User { get; set; }
+	protected new User User 
+	{
+		get => HttpContext.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException(); 
+	}
 
 	public abstract Task<IActionResult> GetById(Guid id);
 	public abstract Task<IActionResult> GetAll();

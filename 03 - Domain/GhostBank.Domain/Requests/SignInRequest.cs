@@ -1,11 +1,11 @@
-﻿using GhostBank.Infrastructure.Middleware.Attributes;
+﻿using GhostBank.Domain.Attributes;
 
 namespace GhostBank.Domain.Requests;
 
 [Request]
 public class SignInRequest
 {
-    public Guid UserId { get; set; }
-    public string? Login { get; set; }
-    public string? Password { get; set; }
+	public Guid UserId { get; set; }
+	public string? Login { get; set; }
+	public string? Password { get; set; }
 }

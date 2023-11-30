@@ -1,11 +1,8 @@
 ﻿using GhostBank.Application.Interface;
-using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces;
 using GhostBank.Domain.Requests;
-using GhostBank.Infrastructure.Middleware.Exceptions.Abstractions;
 using Microsoft.AspNetCore.Http;
-using System.Net;
-using InvalidDataException = GhostBank.Infrastructure.Middleware.Exceptions.Abstractions.InvalidDataException;
+using InvalidDataException = GhostBank.Domain.Exceptions.Abstractions.InvalidDataException;
 
 namespace GhostBank.Application.Services;
 

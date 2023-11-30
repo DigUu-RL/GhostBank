@@ -1,6 +1,6 @@
-﻿using GhostBank.Infrastructure.Data.Entities.Identity;
+﻿using GhostBank.Domain.Attributes;
+using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Data.Enums;
-using GhostBank.Infrastructure.Middleware.Attributes;
 
 namespace GhostBank.Domain.Models;
 
@@ -15,12 +15,12 @@ public class UserModel
 	public string Password { get; set; }
 	public UserRole Role { get; set; }
 
-    public UserModel()
-    {
-        
-    }
+	public UserModel()
+	{
 
-    public UserModel(User entity)
+	}
+
+	public UserModel(User entity)
 	{
 		Id = entity.Id;
 		FirstName = entity.FirstName;

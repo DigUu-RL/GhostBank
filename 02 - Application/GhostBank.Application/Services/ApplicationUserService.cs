@@ -4,7 +4,7 @@ using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Requests;
-using InvalidDataException = GhostBank.Infrastructure.Middleware.Exceptions.Abstractions.InvalidDataException;
+using InvalidDataException = GhostBank.Domain.Exceptions.Abstractions.InvalidDataException;
 
 namespace GhostBank.Application.Services;
 

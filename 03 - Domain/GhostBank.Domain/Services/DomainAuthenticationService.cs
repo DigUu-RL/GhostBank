@@ -1,8 +1,8 @@
-﻿using GhostBank.Domain.Helpers;
+﻿using GhostBank.Domain.Exceptions.Abstractions;
+using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces;
 using GhostBank.Domain.Requests;
 using GhostBank.Infrastructure.Data.Entities.Identity;
-using GhostBank.Infrastructure.Middleware.Exceptions.Abstractions;
 using GhostBank.Infrastructure.Repository.Interfaces;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;
 using Microsoft.AspNetCore.Http;

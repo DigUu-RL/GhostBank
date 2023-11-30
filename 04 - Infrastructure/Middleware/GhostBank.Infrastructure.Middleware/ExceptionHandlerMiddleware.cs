@@ -1,7 +1,6 @@
-﻿using GhostBank.Infrastructure.Middleware.Exceptions;
+﻿using GhostBank.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.Globalization;
 using System.Net;
 
 namespace GhostBank.Infrastructure.Middleware;
@@ -34,15 +33,15 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
 		var response = new
 		{
 			statusCode,
-			errorName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(statusCode.ToString()),
-			errorMessage = ex.Message,
-			innerErrorMessage = ex.InnerException?.Message
+			error = statusCode.ToString(),
+			message = ex.Message,
+			inner = ex.InnerException?.Message
 		};
 
 		string json = JsonConvert.SerializeObject(response);
 
 		context.Response.ContentType = "application/json";
-		context.Response.ContentLength = (int) statusCode;
+		context.Response.StatusCode = (int) statusCode;
 
 		await context.Response.WriteAsync(json);
 	}

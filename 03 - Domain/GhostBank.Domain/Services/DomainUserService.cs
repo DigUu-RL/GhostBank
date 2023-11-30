@@ -1,15 +1,14 @@
-﻿using GhostBank.Domain.Helpers;
+﻿using GhostBank.Domain.Exceptions.Abstractions;
+using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Requests;
 using GhostBank.Infrastructure.Data.Entities.Identity;
-using GhostBank.Infrastructure.Middleware.Exceptions.Abstractions;
 using GhostBank.Infrastructure.Repository.Helpers;
 using GhostBank.Infrastructure.Repository.Interfaces;
 using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;
-using System.Security.Claims;
 
 namespace GhostBank.Domain.Services;
 
@@ -73,11 +72,12 @@ public class DomainUserService(IUserRepository userRepository, IUserClaimReposit
 		await _userRepository.CreateAsync(user);
 		await _userRepository.CommitAsync();
 
-		var claims = new List<UserClaim> 
+		var claims = new List<UserClaim>
 		{
-			new(ClaimTypes.Name, user.UserName),
-			new(ClaimTypes.Email, user.Email),
-			new(ClaimTypes.Role, user.Role.ToString())
+			new(nameof(User.Id), user.Id.ToString()),
+			new(nameof(User.UserName), user.UserName),
+			new(nameof(User.Email), user.Email),
+			new(nameof(User.Role), user.Role.ToString())
 		};
 
 		claims.ForEach(x => x.UserId = user.Id);
@@ -103,9 +103,10 @@ public class DomainUserService(IUserRepository userRepository, IUserClaimReposit
 
 		var claims = new List<UserClaim>
 		{
-			new(ClaimTypes.Name, user.UserName),
-			new(ClaimTypes.Email, user.Email),
-			new(ClaimTypes.Role, user.Role.ToString()),
+			new(nameof(User.Id), user.Id.ToString()),
+			new(nameof(User.UserName), user.UserName),
+			new(nameof(User.Email), user.Email),
+			new(nameof(User.Role), user.Role.ToString())
 		};
 
 		await _userClaimRepository.UpdateAsync(user.Id, [.. claims]);
