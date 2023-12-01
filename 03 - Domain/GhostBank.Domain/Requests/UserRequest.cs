@@ -1,5 +1,5 @@
 ﻿using GhostBank.Domain.Attributes;
-using GhostBank.Infrastructure.Data.Enums;
+using GhostBank.Infrastructure.Data.Enums.Identity;
 
 namespace GhostBank.Domain.Requests;
 
