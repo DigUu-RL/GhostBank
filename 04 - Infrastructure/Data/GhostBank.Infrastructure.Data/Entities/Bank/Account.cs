@@ -6,8 +6,8 @@ namespace GhostBank.Infrastructure.Data.Entities.Bank;
 
 public class Account : EntityBase
 {
-    public int Agency { get; set; }
-    public int Number { get; set; }
+    public string Agency { get; set; } = null!;
+    public string Number { get; set; } = null!;
     public decimal Balance { get; set; }
     public AccountType Type { get; set; }
 
@@ -15,5 +15,5 @@ public class Account : EntityBase
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
     public ICollection<Pix> Pix { get; set; } = [];
-    public ICollection<Card> Card { get; set; } = [];
+    public ICollection<Card> Cards { get; set; } = [];
 }
