@@ -32,6 +32,7 @@ public class PixMap : BaseMap<Pix>
 		builder
 			.HasOne(x => x.Account)
 			.WithMany(x => x.Pix)
+			.HasForeignKey(x => x.AccountId)
 			.OnDelete(DeleteBehavior.NoAction);
 
 		base.Configure(builder);

@@ -2,7 +2,7 @@
 
 namespace GhostBank.Infrastructure.Data.Entities.Cards;
 
-public abstract class Card : EntityBase
+public class Card : EntityBase
 {
     public string Number { get; set; } = null!;
     public string VerificationCode { get; set; } = null!;

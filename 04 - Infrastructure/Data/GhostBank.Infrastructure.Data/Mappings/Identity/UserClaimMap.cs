@@ -25,6 +25,7 @@ public class UserClaimMap : BaseMap<UserClaim>
         builder
             .HasOne(x => x.User)
             .WithMany(x => x.Claims)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.NoAction);
 
 		base.Configure(builder);

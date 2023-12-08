@@ -37,16 +37,19 @@ public class AccountMap : BaseMap<Account>
 		builder
 			.HasOne(x => x.User)
 			.WithMany(x => x.Accounts)
+			.HasForeignKey(x => x.UserId)
 			.OnDelete(DeleteBehavior.NoAction);
 
 		builder
 			.HasMany(x => x.Pix)
 			.WithOne(x => x.Account)
+			.HasForeignKey(x => x.AccountId)
 			.OnDelete(DeleteBehavior.Cascade);
 
 		builder
 			.HasMany(x => x.Cards)
 			.WithOne(x => x.Account)
+			.HasForeignKey(x => x.AccountId)
 			.OnDelete(DeleteBehavior.Cascade);
 
 		base.Configure(builder);
