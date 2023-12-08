@@ -28,7 +28,7 @@ public class GhostBankContext : DbContext
 		base.OnConfiguring(optionsBuilder);
 	}
 
-	protected override async void OnModelCreating(ModelBuilder modelBuilder)
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		#region IDENTITY
 
@@ -47,7 +47,8 @@ public class GhostBankContext : DbContext
 
 		#region CARDS
 
-		modelBuilder.ApplyConfiguration(new CardMap());
+		modelBuilder.ApplyConfiguration(new CardMap(modelBuilder));
+		modelBuilder.ApplyConfiguration(new InvoiceMap());
 
 		#endregion
 

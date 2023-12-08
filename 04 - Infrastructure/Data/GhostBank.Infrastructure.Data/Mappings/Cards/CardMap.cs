@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GhostBank.Infrastructure.Data.Mappings.Cards;
 
-public class CardMap : BaseMap<Card>
+public class CardMap(ModelBuilder modelBuilder) : BaseMap<Card>
 {
+	private readonly ModelBuilder _modelBuilder = modelBuilder;
+
 	public override void Configure(EntityTypeBuilder<Card> builder)
 	{
 		builder.ToTable(nameof(Card));
@@ -36,6 +38,15 @@ public class CardMap : BaseMap<Card>
 			.HasForeignKey(x => x.AccountId)
 			.OnDelete(DeleteBehavior.NoAction);
 
+		MapDerivedTypes();
+
 		base.Configure(builder);
+	}
+
+	private void MapDerivedTypes()
+	{
+		CreditCardMap.Configure(_modelBuilder);
+		DebitCardMap.Configure(_modelBuilder);
+		VirtualCardMap.Configure(_modelBuilder);
 	}
 }

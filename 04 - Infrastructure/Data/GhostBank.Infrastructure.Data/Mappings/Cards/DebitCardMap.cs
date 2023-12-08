@@ -1,14 +1,15 @@
 ﻿using GhostBank.Infrastructure.Data.Entities.Cards;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GhostBank.Infrastructure.Data.Mappings.Cards;
 
-public class DebitCardMap : BaseMap<DebitCard>
+public class DebitCardMap
 {
-	public override void Configure(EntityTypeBuilder<DebitCard> builder)
+	public static void Configure(ModelBuilder modelBuilder)
 	{
-		builder.HasBaseType(typeof(Card));
+		EntityTypeBuilder<DebitCard> builder = modelBuilder.Entity<DebitCard>();
 
-		base.Configure(builder);
+		builder.HasBaseType(typeof(Card));
 	}
 }
