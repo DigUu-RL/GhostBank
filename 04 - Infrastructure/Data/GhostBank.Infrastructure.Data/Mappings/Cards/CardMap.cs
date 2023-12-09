@@ -1,13 +1,12 @@
 ﻿using GhostBank.Infrastructure.Data.Entities.Cards;
+using GhostBank.Infrastructure.Data.Enums.Cards;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GhostBank.Infrastructure.Data.Mappings.Cards;
 
-public class CardMap(ModelBuilder modelBuilder) : BaseMap<Card>
+public class CardMap : BaseMap<Card>
 {
-	private readonly ModelBuilder _modelBuilder = modelBuilder;
-
 	public override void Configure(EntityTypeBuilder<Card> builder)
 	{
 		builder.ToTable(nameof(Card));
@@ -33,20 +32,23 @@ public class CardMap(ModelBuilder modelBuilder) : BaseMap<Card>
 			.IsRequired();
 
 		builder
+			.Property(x => x.Type)
+			.HasColumnType("VARCHAR")
+			.IsRequired();
+
+		builder
 			.HasOne(x => x.Account)
 			.WithMany(x => x.Cards)
 			.HasForeignKey(x => x.AccountId)
 			.OnDelete(DeleteBehavior.NoAction);
 
-		MapDerivedTypes();
+		builder
+			.HasDiscriminator(x => x.Type)
+			.HasValue<Card>(CardType.Default)
+			.HasValue<CreditCard>(CardType.Credit)
+			.HasValue<DebitCard>(CardType.Debit)
+			.HasValue<VirtualCard>(CardType.Virtual);
 
 		base.Configure(builder);
-	}
-
-	private void MapDerivedTypes()
-	{
-		CreditCardMap.Configure(_modelBuilder);
-		DebitCardMap.Configure(_modelBuilder);
-		VirtualCardMap.Configure(_modelBuilder);
 	}
 }

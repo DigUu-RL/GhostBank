@@ -1,4 +1,4 @@
-﻿namespace GhostBank.Infrastructure.Data.Enums.Account;
+﻿namespace GhostBank.Infrastructure.Data.Enums.Bank;
 
 public enum AccountType
 {

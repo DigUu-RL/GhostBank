@@ -31,6 +31,7 @@ public class InvoiceMap : BaseMap<Invoice>
 		builder
 			.HasOne(x => x.Card)
 			.WithMany(x => x.Invoices)
+			.HasForeignKey(x => x.CardId)
 			.OnDelete(DeleteBehavior.NoAction);
 
 		base.Configure(builder);

@@ -47,7 +47,10 @@ public class GhostBankContext : DbContext
 
 		#region CARDS
 
-		modelBuilder.ApplyConfiguration(new CardMap(modelBuilder));
+		modelBuilder.ApplyConfiguration(new CardMap());
+		modelBuilder.ApplyConfiguration(new CreditCardMap());
+		modelBuilder.ApplyConfiguration(new DebitCardMap());
+		modelBuilder.ApplyConfiguration(new VirtualCardMap());
 		modelBuilder.ApplyConfiguration(new InvoiceMap());
 
 		#endregion

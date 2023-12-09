@@ -4,17 +4,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GhostBank.Infrastructure.Data.Mappings.Cards;
 
-public class CreditCardMap
+public class CreditCardMap : BaseMap<CreditCard>
 {
-    public static void Configure(ModelBuilder modelBuilder)
+	public override void Configure(EntityTypeBuilder<CreditCard> builder)
 	{
-		EntityTypeBuilder<CreditCard> builder = modelBuilder.Entity<CreditCard>();
-
 		builder.HasBaseType(typeof(Card));
 
 		builder
 			.Property(x => x.Limit)
 			.HasColumnType("DECIMAL")
 			.IsRequired();
+
+		builder
+			.HasMany(x => x.Invoices)
+			.WithOne(x => x.Card)
+			.HasForeignKey(x => x.CardId)
+			.OnDelete(DeleteBehavior.Cascade);
 	}
 }

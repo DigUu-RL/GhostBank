@@ -120,11 +120,6 @@ namespace GhostBank.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("DATETIME");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
                     b.Property<bool>("Excluded")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -144,6 +139,10 @@ namespace GhostBank.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR");
+
                     b.Property<string>("VerificationCode")
                         .IsRequired()
                         .HasColumnType("VARCHAR");
@@ -154,7 +153,7 @@ namespace GhostBank.Infrastructure.Data.Migrations
 
                     b.ToTable("Card", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Card");
+                    b.HasDiscriminator<string>("Type").HasValue("Default");
 
                     b.UseTphMappingStrategy();
                 });
@@ -363,14 +362,14 @@ namespace GhostBank.Infrastructure.Data.Migrations
                     b.Property<decimal>("Limit")
                         .HasColumnType("DECIMAL");
 
-                    b.HasDiscriminator().HasValue("CreditCard");
+                    b.HasDiscriminator().HasValue("Credit");
                 });
 
             modelBuilder.Entity("GhostBank.Infrastructure.Data.Entities.Cards.DebitCard", b =>
                 {
                     b.HasBaseType("GhostBank.Infrastructure.Data.Entities.Cards.Card");
 
-                    b.HasDiscriminator().HasValue("DebitCard");
+                    b.HasDiscriminator().HasValue("Debit");
                 });
 
             modelBuilder.Entity("GhostBank.Infrastructure.Data.Entities.Cards.VirtualCard", b =>
@@ -389,7 +388,7 @@ namespace GhostBank.Infrastructure.Data.Migrations
                                 .HasColumnName("VirtualCard_Limit");
                         });
 
-                    b.HasDiscriminator().HasValue("VirtualCard");
+                    b.HasDiscriminator().HasValue("Virtual");
                 });
 
             modelBuilder.Entity("GhostBank.Infrastructure.Data.Entities.Bank.Account", b =>

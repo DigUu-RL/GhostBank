@@ -114,7 +114,11 @@ namespace GhostBank.Infrastructure.Data.Migrations
                     VerificationCode = table.Column<string>(type: "VARCHAR", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "DATETIME", nullable: false),
                     Password = table.Column<string>(type: "VARCHAR", nullable: false),
+                    Type = table.Column<string>(type: "VARCHAR", nullable: false),
                     AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Limit = table.Column<decimal>(type: "DECIMAL(18,0)", nullable: true),
+                    IsCredit = table.Column<bool>(type: "BIT", nullable: true),
+                    VirtualCard_Limit = table.Column<decimal>(type: "DECIMAL(18,0)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "DATETIME", nullable: false),
                     LastUpdate = table.Column<DateTime>(type: "DATETIME", nullable: false),
                     Excluded = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
@@ -152,6 +156,30 @@ namespace GhostBank.Infrastructure.Data.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Invoice",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Amount = table.Column<decimal>(type: "DECIMAL(18,0)", nullable: false),
+                    PaidAmount = table.Column<decimal>(type: "DECIMAL(18,0)", nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    IsPaid = table.Column<bool>(type: "BIT", nullable: false),
+                    CardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    LastUpdate = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    Excluded = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoice", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invoice_Card_CardId",
+                        column: x => x.CardId,
+                        principalTable: "Card",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Account_Number",
                 table: "Account",
@@ -167,6 +195,11 @@ namespace GhostBank.Infrastructure.Data.Migrations
                 name: "IX_Card_AccountId",
                 table: "Card",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoice_CardId",
+                table: "Invoice",
+                column: "CardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pix_AccountId",
@@ -207,13 +240,16 @@ namespace GhostBank.Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Card");
+                name: "Invoice");
 
             migrationBuilder.DropTable(
                 name: "Pix");
 
             migrationBuilder.DropTable(
                 name: "UserClaim");
+
+            migrationBuilder.DropTable(
+                name: "Card");
 
             migrationBuilder.DropTable(
                 name: "Account");

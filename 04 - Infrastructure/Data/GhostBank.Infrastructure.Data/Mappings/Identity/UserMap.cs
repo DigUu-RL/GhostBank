@@ -1,11 +1,6 @@
-﻿using GhostBank.Infrastructure.Data.Entities.Bank;
-using GhostBank.Infrastructure.Data.Entities.Identity;
-using GhostBank.Infrastructure.Data.Enums.Account;
-using GhostBank.Infrastructure.Data.Enums.Identity;
+﻿using GhostBank.Infrastructure.Data.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace GhostBank.Infrastructure.Data.Mappings.Identity;
 
@@ -14,8 +9,6 @@ public class UserMap : BaseMap<User>
 	public override void Configure(EntityTypeBuilder<User> builder)
 	{
 		builder.ToTable(nameof(User));
-
-		
 
 		builder
 			.Property(x => x.Id)

@@ -6,10 +6,8 @@ namespace GhostBank.Infrastructure.Data.Mappings.Cards;
 
 public class VirtualCardMap : BaseMap<VirtualCard>
 {
-	public static void Configure(ModelBuilder modelBuilder)
+	public override void Configure(EntityTypeBuilder<VirtualCard> builder)
 	{
-		EntityTypeBuilder<VirtualCard> builder = modelBuilder.Entity<VirtualCard>();
-
 		builder.HasBaseType(typeof(Card));
 
 		builder
