@@ -1,10 +1,16 @@
-﻿using GhostBank.Infrastructure.Data.Entities.Identity;
+﻿using GhostBank.Infrastructure.Data.Entities.Bank;
+using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Repository.Interfaces;
 
 namespace GhostBank.Infrastructure.Repository.Repositories;
 
-public class RepositoryWrapper(IUserRepository userRepository, IUserClaimRepository userClaimRepository) : IRepositoryWrapper
+public class RepositoryWrapper(
+    IAccountRepository accountRepository, 
+    IUserRepository userRepository, 
+    IUserClaimRepository userClaimRepository
+) : IRepositoryWrapper
 {
-	public IBaseRepository<User> User { get; } = userRepository;
+    public IBaseRepository<Account> Account { get; } = accountRepository;
+    public IBaseRepository<User> User { get; } = userRepository;
 	public IBaseRepository<UserClaim> UserClaim { get; } = userClaimRepository;
 }

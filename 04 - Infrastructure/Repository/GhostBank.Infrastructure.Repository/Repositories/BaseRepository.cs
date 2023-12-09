@@ -5,9 +5,7 @@ using GhostBank.Infrastructure.Repository.Interfaces;
 using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
-using System.Security.Cryptography;
 
 namespace GhostBank.Infrastructure.Repository.Repositories;
 
@@ -17,7 +15,7 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 	private readonly DbSet<TEntity> _entity = context.Set<TEntity>();
 	private IQueryable<TEntity> _query = context.Set<TEntity>().AsQueryable();
 
-    public virtual void Include<TProperty>(Expression<Func<TEntity, TProperty>> expression)
+	public virtual void Include<TProperty>(Expression<Func<TEntity, TProperty>> expression)
 	{
 		_query = _query.Include(expression);
 	}

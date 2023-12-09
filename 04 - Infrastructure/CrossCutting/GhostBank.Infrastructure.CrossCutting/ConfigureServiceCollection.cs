@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Asp.Versioning.ApiExplorer;
 using GhostBank.Application.Interface;
 using GhostBank.Application.Services;
 using GhostBank.Domain.Interfaces;
@@ -10,12 +9,11 @@ using GhostBank.Infrastructure.Repository.Interfaces;
 using GhostBank.Infrastructure.Repository.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Net;
 using System.Text;
 
 namespace GhostBank.Infrastructure.CrossCutting;
@@ -24,9 +22,10 @@ public static class ConfigureServiceCollection
 {
 	public static IServiceCollection AddDependencyInjection(this IServiceCollection services)
 	{
-		Console.WriteLine("Starting configure dependency injection...");
-
 		services.AddDbContext<GhostBankContext>();
+
+		services.AddScoped(typeof(IDomainAccountService), typeof(DomainAccountService));
+		services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
 
 		services.AddScoped(typeof(IApplicationUserService), typeof(ApplicationUserService));
 		services.AddScoped(typeof(IDomainUserService), typeof(DomainUserService));
@@ -42,15 +41,19 @@ public static class ConfigureServiceCollection
 		services.AddScoped(typeof(IRepositoryWrapper), typeof(RepositoryWrapper));
 		services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
-		Console.WriteLine("Configuration of dependency injection finished");
-
 		return services;
+	}
+
+	public static IApplicationBuilder AddMiddlewares(this IApplicationBuilder builder)
+	{
+		builder.UseMiddleware(typeof(ExceptionHandlerMiddleware));
+		builder.UseMiddleware(typeof(JwtMiddleware));
+
+		return builder;
 	}
 
 	public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
 	{
-		Console.WriteLine("Starting configuration services...");
-
 		services
 			.AddAuthentication(x =>
 			{
@@ -59,8 +62,6 @@ public static class ConfigureServiceCollection
 			})
 			.AddJwtBearer(x =>
 			{
-				Console.WriteLine("Starting configuration JWT Bearer Authorization...");
-
 				x.RequireHttpsMetadata = true;
 				x.SaveToken = true;
 
@@ -80,8 +81,6 @@ public static class ConfigureServiceCollection
 				};
 			});
 
-		Console.WriteLine("Configuration JWT Bearer Authorization finished");
-
 		services.AddSwaggerGen(options =>
 		{
 			options.CustomSchemaIds(x => x.FullName);
@@ -93,7 +92,7 @@ public static class ConfigureServiceCollection
 					"Digite 'Bearer' [espaço] e então seu token no campo abaixo.\r\n\r\n" +
 					"Exemplo (informar sem as aspas): 'Bearer token123'",
 
-				Name = "Authorization",
+				Name = nameof(Authorization),
 				In = ParameterLocation.Header,
 				Type = SecuritySchemeType.ApiKey,
 				Scheme = JwtBearerDefaults.AuthenticationScheme,
@@ -116,10 +115,8 @@ public static class ConfigureServiceCollection
 			});
 		});
 
-		Console.WriteLine("Starting configuration API versioning...");
-
 		services
-			.AddApiVersioning(x => 
+			.AddApiVersioning(x =>
 			{
 				x.DefaultApiVersion = new ApiVersion(1);
 				x.AssumeDefaultVersionWhenUnspecified = true;
@@ -131,22 +128,6 @@ public static class ConfigureServiceCollection
 				x.SubstituteApiVersionInUrl = true;
 			});
 
-		Console.WriteLine("Configuration API versioning finished");
-
-		Console.WriteLine("Configuration services finished");
-
 		return services;
-	}
-
-	public static IApplicationBuilder AddMiddlewares(this IApplicationBuilder builder)
-	{
-		Console.WriteLine("Starting add and configure middlewares...");
-
-		builder.UseMiddleware(typeof(ExceptionHandlerMiddleware));
-		builder.UseMiddleware(typeof(JwtMiddleware));
-
-		Console.WriteLine("Configuration of add and configure middlewares finished");
-
-		return builder;
 	}
 }
