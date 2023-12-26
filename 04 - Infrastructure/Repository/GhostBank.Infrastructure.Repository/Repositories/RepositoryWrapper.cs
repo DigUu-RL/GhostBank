@@ -1,6 +1,8 @@
 ﻿using GhostBank.Infrastructure.Data.Entities.Bank;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Repository.Interfaces;
+using GhostBank.Infrastructure.Repository.Interfaces.Bank;
+using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 
 namespace GhostBank.Infrastructure.Repository.Repositories;
 

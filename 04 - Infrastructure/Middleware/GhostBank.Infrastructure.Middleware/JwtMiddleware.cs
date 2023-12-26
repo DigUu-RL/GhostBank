@@ -1,4 +1,4 @@
-﻿using GhostBank.Domain.Interfaces;
+﻿using GhostBank.Domain.Interfaces.Authentication;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +16,7 @@ public class JwtMiddleware(RequestDelegate next, IServiceProvider provider)
 
 	public async Task InvokeAsync(HttpContext context)
 	{
-		string? token = context.Request.Headers[nameof(Authorization)].SingleOrDefault()?.Split(" ").Last();
+		string? token = context.Request.Headers[nameof(Authorization)].SingleOrDefault();
 
 		if (!string.IsNullOrEmpty(token))
 			await AttachUserAsync(context, token);

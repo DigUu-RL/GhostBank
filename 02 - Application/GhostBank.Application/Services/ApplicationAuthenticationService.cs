@@ -1,5 +1,5 @@
-﻿using GhostBank.Application.Interface;
-using GhostBank.Domain.Interfaces;
+﻿using GhostBank.Application.Interface.Authentication;
+using GhostBank.Domain.Interfaces.Authentication;
 using GhostBank.Domain.Requests;
 using Microsoft.AspNetCore.Http;
 using InvalidDataException = GhostBank.Domain.Exceptions.Abstractions.InvalidDataException;

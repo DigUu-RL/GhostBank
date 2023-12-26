@@ -11,13 +11,13 @@ namespace GhostBank.Infrastructure.Repository.Repositories;
 
 public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository<TEntity> where TEntity : EntityBase
 {
-	private readonly GhostBankContext _context = context;
+	private readonly GhostBankContext _context = context ?? throw new ArgumentNullException(nameof(context));
 	private readonly DbSet<TEntity> _entity = context.Set<TEntity>();
 	private IQueryable<TEntity> _query = context.Set<TEntity>().AsQueryable();
 
-	public virtual void Include<TProperty>(Expression<Func<TEntity, TProperty>> expression)
+	public void With(Func<IQueryable<TEntity>, IQueryable<TEntity>> expression)
 	{
-		_query = _query.Include(expression);
+		_query = expression.Invoke(_query);
 	}
 
 	public virtual IQueryable<TEntity> Query(Specification<TEntity>? specification = null)

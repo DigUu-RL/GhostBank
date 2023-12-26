@@ -11,11 +11,16 @@ public abstract class BaseController<TRequest> : Controller where TRequest : cla
 		get => HttpContext.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException(); 
 	}
 
-	public abstract Task<IActionResult> GetById(Guid id);
-	public abstract Task<IActionResult> GetAll();
-	public abstract Task<IActionResult> Get([FromQuery] Search<TRequest> search);
-	public abstract Task<IActionResult> GetWithExcluded([FromQuery] Search<TRequest> search);
-	public abstract Task<IActionResult> Create([FromBody] TRequest request);
-	public abstract Task<IActionResult> Update([FromBody] TRequest request);
-	public abstract Task<IActionResult> Delete(Guid id);
+	public virtual Task<IActionResult> GetById(Guid id) => throw new NotImplementedException("Recurso ainda não implementado");
+	public virtual Task<IActionResult> GetAll() => throw new NotImplementedException("Recurso ainda não implementado");
+
+	public virtual Task<IActionResult> Get([FromQuery] Search<TRequest> search) => 
+		throw new NotImplementedException("Recurso ainda não implementado");
+
+	public virtual Task<IActionResult> GetWithExcluded([FromQuery] Search<TRequest> search) => 
+		throw new NotImplementedException("Recurso ainda não implementado");
+
+	public virtual Task<IActionResult> Create([FromBody] TRequest request) => throw new NotImplementedException("Recurso ainda não implementado");
+	public virtual Task<IActionResult> Update([FromBody] TRequest request) => throw new NotImplementedException("Recurso ainda não implementado");
+	public virtual Task<IActionResult> Delete(Guid id) => throw new NotImplementedException("Recurso ainda não implementado");
 }

@@ -1,12 +1,24 @@
 ﻿using Asp.Versioning;
-using GhostBank.Application.Interface;
+using GhostBank.Application.Interface.Authentication;
+using GhostBank.Application.Interface.Bank;
+using GhostBank.Application.Interface.Identity;
 using GhostBank.Application.Services;
-using GhostBank.Domain.Interfaces;
-using GhostBank.Domain.Services;
+using GhostBank.Application.Services.Bank;
+using GhostBank.Application.Services.Identity;
+using GhostBank.Domain.Interfaces.Authentication;
+using GhostBank.Domain.Interfaces.Bank;
+using GhostBank.Domain.Interfaces.Identity;
+using GhostBank.Domain.Services.Authentication;
+using GhostBank.Domain.Services.Bank;
+using GhostBank.Domain.Services.Identity;
 using GhostBank.Infrastructure.Data.Contexts;
 using GhostBank.Infrastructure.Middleware;
 using GhostBank.Infrastructure.Repository.Interfaces;
+using GhostBank.Infrastructure.Repository.Interfaces.Bank;
+using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using GhostBank.Infrastructure.Repository.Repositories;
+using GhostBank.Infrastructure.Repository.Repositories.Bank;
+using GhostBank.Infrastructure.Repository.Repositories.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +36,7 @@ public static class ConfigureServiceCollection
 	{
 		services.AddDbContext<GhostBankContext>();
 
+		services.AddScoped(typeof(IApplicationAccountService), typeof(ApplicationAccountService));
 		services.AddScoped(typeof(IDomainAccountService), typeof(DomainAccountService));
 		services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
 

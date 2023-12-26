@@ -9,7 +9,7 @@ public interface IDomainServiceBase<TModel, TRequest> where TRequest : class
 	Task<List<TModel>> GetAllAsync();
 	Task<PaginatedListModel<TModel>> GetAsync(Search<TRequest> search);
 	Task<PaginatedListModel<TModel>> GetWithExcludedAsync(Search<TRequest> search);
-	Task CreateAsync(TRequest model);
-	Task UpdateAsync(TRequest model);
+	Task CreateAsync(TRequest request);
+	Task UpdateAsync(TRequest request);
 	Task DeleteAsync(Guid id);
 }

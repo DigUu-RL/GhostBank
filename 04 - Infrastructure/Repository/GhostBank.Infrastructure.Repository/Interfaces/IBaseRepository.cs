@@ -1,13 +1,12 @@
 ﻿using GhostBank.Infrastructure.Data.Entities;
 using GhostBank.Infrastructure.Repository.Helpers;
 using GhostBank.Infrastructure.Repository.Specifications;
-using System.Linq.Expressions;
 
 namespace GhostBank.Infrastructure.Repository.Interfaces;
 
 public interface IBaseRepository<TEntity> : IUnitOfWork where TEntity : EntityBase
 {
-	void Include<TProperty>(Expression<Func<TEntity, TProperty>> expression);
+	void With(Func<IQueryable<TEntity>, IQueryable<TEntity>> expression);
 	IQueryable<TEntity> Query(Specification<TEntity>? specification = null);
 	Task<TEntity?> GetByIdAsync(Guid id);
 	Task<List<TEntity>> GetAllAsync();
