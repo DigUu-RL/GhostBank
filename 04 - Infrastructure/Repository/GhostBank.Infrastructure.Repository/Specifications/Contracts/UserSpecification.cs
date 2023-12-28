@@ -20,6 +20,16 @@ public static class UserSpecification
 		return new ExpressionSpecification<User>(x => x.LastName.ToLower() == lastName.ToLower());
 	}
 
+	public static Specification<User> ByCPF(string cpf)
+	{
+		return new ExpressionSpecification<User>(x => x.CPF == cpf);
+	}
+
+	public static Specification<User> ByCNPJ(string cnpj)
+	{
+		return new ExpressionSpecification<User>(x => x.CNPJ == cnpj);
+	}
+
 	public static Specification<User> ByUserName(string userName)
 	{
 		return new ExpressionSpecification<User>(x => x.UserName.ToLower() == userName.ToLower());
@@ -28,5 +38,10 @@ public static class UserSpecification
 	public static Specification<User> ByEmail(string email)
 	{
 		return new ExpressionSpecification<User>(x => x.Email.ToLower() == email.ToLower());
+	}
+
+	public static Specification<User> ByCellphone(string cellphone)
+	{
+		return new ExpressionSpecification<User>(x => x.Cellphone == cellphone);
 	}
 }

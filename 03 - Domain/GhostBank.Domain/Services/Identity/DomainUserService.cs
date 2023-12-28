@@ -10,6 +10,7 @@ using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace GhostBank.Domain.Services.Identity;
 
@@ -58,16 +59,19 @@ public class DomainUserService(IUserRepository userRepository, IUserClaimReposit
         };
     }
 
-    public async Task CreateAsync(UserRequest model)
+    public async Task CreateAsync(UserRequest request)
     {
         var user = new User
         {
-            FirstName = model.FirstName!,
-            LastName = model.LastName!,
-            UserName = model.UserName!,
-            Email = model.Email!,
-            Role = model.Role,
-            Password = await Util.CreateHashAsync(model.Password!)
+            FirstName = request.FirstName!,
+            LastName = request.LastName!,
+            CPF = request.CPF!,
+            CNPJ = request.CNPJ,
+            UserName = request.UserName!,
+            Email = request.Email!,
+            Cellphone = request.Cellphone!,
+            Role = request.Role,
+            Password = await Util.CreateHashAsync(request.Password!)
         };
 
         await _userRepository.CreateAsync(user);
@@ -87,17 +91,18 @@ public class DomainUserService(IUserRepository userRepository, IUserClaimReposit
         await _userClaimRepository.CommitAsync();
     }
 
-    public async Task UpdateAsync(UserRequest model)
+    public async Task UpdateAsync(UserRequest request)
     {
-        _userRepository.Include(x => x.Claims);
+        _userRepository.With(x => x.Include(user => user.Claims));
 
-        User? user = await _userRepository.GetByIdAsync(model.Id.GetValueOrDefault()) ?? throw new NotFoundException("Usuário não encontrado");
+        User user = await _userRepository.GetByIdAsync(request.Id.GetValueOrDefault()) ?? throw new NotFoundException("Usuário não encontrado");
 
-        user.FirstName = model.FirstName!;
-        user.LastName = model.LastName!;
-        user.UserName = model.UserName!;
-        user.Email = model.Email!;
-        user.Role = model.Role;
+        user.FirstName = request.FirstName!;
+        user.LastName = request.LastName!;
+        user.UserName = request.UserName!;
+        user.Email = request.Email!;
+        user.Cellphone = request.Cellphone!;
+        user.Role = request.Role;
 
         await _userRepository.UpdateAsync(user);
         await _userRepository.CommitAsync();
@@ -147,12 +152,21 @@ public class DomainUserService(IUserRepository userRepository, IUserClaimReposit
             if (!string.IsNullOrEmpty(search.Filter.LastName))
                 specification &= UserSpecification.ByLastName(search.Filter.LastName);
 
-            if (!string.IsNullOrEmpty(search.Filter.UserName))
+			if (!string.IsNullOrEmpty(search.Filter.CPF))
+				specification &= UserSpecification.ByCPF(search.Filter.CPF);
+
+			if (!string.IsNullOrEmpty(search.Filter.CNPJ))
+				specification &= UserSpecification.ByCNPJ(search.Filter.CNPJ);
+
+			if (!string.IsNullOrEmpty(search.Filter.UserName))
                 specification &= UserSpecification.ByUserName(search.Filter.UserName);
 
             if (!string.IsNullOrEmpty(search.Filter.Email))
                 specification &= UserSpecification.ByEmail(search.Filter.Email);
-        }
+
+			if (!string.IsNullOrEmpty(search.Filter.Cellphone))
+				specification &= UserSpecification.ByCellphone(search.Filter.Cellphone);
+		}
 
         return specification;
     }

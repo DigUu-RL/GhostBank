@@ -10,10 +10,9 @@ public static class EnumExtensions
 	/// <returns></returns>
 	public static bool IsValid<TEnum>(this TEnum @enum) where TEnum : Enum
 	{
-		Type type = @enum.GetType();
 		string name = @enum.ToString();
 
-		string[] names = Enum.GetNames(type);
+		string[] names = Enum.GetNames(typeof(TEnum));
 		return names.Contains(name);
 	}
 }
