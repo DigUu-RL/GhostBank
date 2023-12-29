@@ -7,6 +7,7 @@ namespace GhostBank.Infrastructure.Repository.Interfaces;
 public interface IBaseRepository<TEntity> : IUnitOfWork where TEntity : EntityBase
 {
 	void With(Func<IQueryable<TEntity>, IQueryable<TEntity>> expression);
+	Task RunSqlAsync(string sql);
 	IQueryable<TEntity> Query(Specification<TEntity>? specification = null);
 	Task<TEntity?> GetByIdAsync(Guid id);
 	Task<List<TEntity>> GetAllAsync();

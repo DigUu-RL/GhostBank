@@ -1,34 +1,20 @@
-﻿using GhostBank.Infrastructure.Data.Contexts;
-using GhostBank.Infrastructure.Data.Entities;
+﻿using GhostBank.Infrastructure.Data.Contexts.Audit;
+using GhostBank.Infrastructure.Data.Entities.Audit;
 using GhostBank.Infrastructure.Repository.Helpers;
-using GhostBank.Infrastructure.Repository.Interfaces;
+using GhostBank.Infrastructure.Repository.Interfaces.Audit;
 using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 
-namespace GhostBank.Infrastructure.Repository.Repositories;
+namespace GhostBank.Infrastructure.Repository.Repositories.Audit;
 
-public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository<TEntity> where TEntity : EntityBase
+public class BaseLogRepository<TEntity>(GhostBankAuditContext context) : IBaseLogRepository<TEntity> where TEntity : EntityAuditBase
 {
-	private readonly GhostBankContext _context = context ?? throw new ArgumentNullException(nameof(context));
+	private readonly GhostBankAuditContext _context = context ?? throw new ArgumentNullException(nameof(context));
 	private readonly DbSet<TEntity> _entity = context.Set<TEntity>();
-	private IQueryable<TEntity> _query = context.Set<TEntity>().AsQueryable();
+	private readonly IQueryable<TEntity> _query = context.Set<TEntity>().AsQueryable();
 
-	public void With(Func<IQueryable<TEntity>, IQueryable<TEntity>> expression)
-	{
-		_query = expression.Invoke(_query);
-	}
-
-	public async Task RunSqlAsync(string sql)
-	{
-		DatabaseFacade database = _context.Database;
-		await database.ExecuteSqlRawAsync(sql);
-	}
-
-	public virtual IQueryable<TEntity> Query(Specification<TEntity>? specification = null)
+	public IQueryable<TEntity> Query(Specification<TEntity>? specification = null)
 	{
 		specification ??= new TrueSpecification<TEntity>();
 		return _query.Where(specification);
@@ -53,31 +39,13 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 		return await PaginatedList<TEntity>.CreateInstanceAsync(items, page, quantity);
 	}
 
-	public virtual async Task<PaginatedList<TEntity>> GetWithExcludedAsync(int page, int quantity, Specification<TEntity>? specification = null)
-	{
-		specification ??= new TrueSpecification<TEntity>();
-		specification &= new ExpressionSpecification<TEntity>(x => !x.Excluded);
-
-		IQueryable<TEntity> items = _query.Where(specification);
-		return await PaginatedList<TEntity>.CreateInstanceAsync(items, page, quantity);
-	}
-
 	public virtual async Task CreateAsync(params TEntity[] entities)
 	{
-		foreach (TEntity entity in entities)
-		{
-			entity.CreatedOn = DateTime.UtcNow;
-			entity.LastUpdate = DateTime.UtcNow;
-		}
-
 		await _entity.AddRangeAsync(entities);
 	}
 
 	public virtual Task UpdateAsync(params TEntity[] entities)
 	{
-		foreach (TEntity entity in entities)
-			entity.LastUpdate = DateTime.UtcNow;
-
 		_entity.UpdateRange(entities);
 		return Task.CompletedTask;
 	}

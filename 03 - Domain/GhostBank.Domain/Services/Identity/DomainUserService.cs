@@ -89,6 +89,8 @@ public class DomainUserService(IUserRepository userRepository, IUserClaimReposit
 
         await _userClaimRepository.CreateAsync([.. claims]);
         await _userClaimRepository.CommitAsync();
+
+        await _userRepository.GrantDataBaseAccess(user);
     }
 
     public async Task UpdateAsync(UserRequest request)
@@ -117,7 +119,9 @@ public class DomainUserService(IUserRepository userRepository, IUserClaimReposit
 
         await _userClaimRepository.UpdateAsync(user.Id, [.. claims]);
         await _userClaimRepository.CommitAsync();
-    }
+
+		await _userRepository.GrantDataBaseAccess(user);
+	}
 
     public async Task DeleteAsync(Guid id)
     {

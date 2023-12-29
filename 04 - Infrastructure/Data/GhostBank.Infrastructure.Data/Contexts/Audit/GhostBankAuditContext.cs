@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GhostBank.Infrastructure.Data.Mappings.Audit.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace GhostBank.Infrastructure.Data.Contexts.Audit;
@@ -27,6 +28,12 @@ public class GhostBankAuditContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
+		#region IDENTITY
+
+		modelBuilder.ApplyConfiguration(new UserAuditMap());
+
+		#endregion
+
 		base.OnModelCreating(modelBuilder);
 	}
 }

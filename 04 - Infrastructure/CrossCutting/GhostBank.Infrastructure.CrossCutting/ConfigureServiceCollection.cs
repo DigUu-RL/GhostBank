@@ -12,11 +12,16 @@ using GhostBank.Domain.Services.Authentication;
 using GhostBank.Domain.Services.Bank;
 using GhostBank.Domain.Services.Identity;
 using GhostBank.Infrastructure.Data.Contexts;
+using GhostBank.Infrastructure.Data.Contexts.Audit;
 using GhostBank.Infrastructure.Middleware;
 using GhostBank.Infrastructure.Repository.Interfaces;
+using GhostBank.Infrastructure.Repository.Interfaces.Audit;
+using GhostBank.Infrastructure.Repository.Interfaces.Audit.Identity;
 using GhostBank.Infrastructure.Repository.Interfaces.Bank;
 using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using GhostBank.Infrastructure.Repository.Repositories;
+using GhostBank.Infrastructure.Repository.Repositories.Audit;
+using GhostBank.Infrastructure.Repository.Repositories.Audit.Identity;
 using GhostBank.Infrastructure.Repository.Repositories.Bank;
 using GhostBank.Infrastructure.Repository.Repositories.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -35,10 +40,29 @@ public static class ConfigureServiceCollection
 	public static IServiceCollection AddDependencyInjection(this IServiceCollection services)
 	{
 		services.AddDbContext<GhostBankContext>();
+		services.AddDbContext<GhostBankAuditContext>();
+
+		#region AUDIT
+
+		#region IDENTITY
+
+		services.AddScoped(typeof(IUserLogRepository), typeof(UserLogRepository));
+
+		#endregion
+
+		services.AddScoped(typeof(IBaseLogRepository<>), typeof(BaseLogRepository<>));
+
+		#endregion
+
+		#region BANK
 
 		services.AddScoped(typeof(IApplicationAccountService), typeof(ApplicationAccountService));
 		services.AddScoped(typeof(IDomainAccountService), typeof(DomainAccountService));
 		services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
+
+		#endregion
+
+		#region IDENTITY
 
 		services.AddScoped(typeof(IApplicationUserService), typeof(ApplicationUserService));
 		services.AddScoped(typeof(IDomainUserService), typeof(DomainUserService));
@@ -46,10 +70,16 @@ public static class ConfigureServiceCollection
 
 		services.AddScoped(typeof(IUserClaimRepository), typeof(UserClaimRepository));
 
+		#endregion
+
+		#region AUTHENTICATION
+
 		services.AddScoped(typeof(IApplicationAuthenticationService), typeof(ApplicationAuthenticationService));
 		services.AddScoped(typeof(IDomainAuthenticationService), typeof(DomainAuthenticationService));
 
 		services.AddScoped(typeof(IDomainJwtService), typeof(DomainJwtService));
+
+		#endregion
 
 		services.AddScoped(typeof(IRepositoryWrapper), typeof(RepositoryWrapper));
 		services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GhostBank.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(GhostBankContext))]
-    [Migration("20231209180745_InitialCreate")]
+    [Migration("20231229192430_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
