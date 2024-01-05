@@ -51,7 +51,7 @@ public class DomainJwtService(IConfiguration configuration, IUserRepository user
     public async Task<User> ValidateTokenAsync(string token)
     {
         string type = token.Split(" ").First();
-        string value = token.Split(" ").First();
+        string value = token.Split(" ").Last();
 
         if (!type.Equals("Bearer", StringComparison.CurrentCultureIgnoreCase))
             throw new InvalidTokenException("Tipo de token inválido");

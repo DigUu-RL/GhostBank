@@ -17,9 +17,11 @@ namespace GhostBank.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Street = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: false),
-                    Number = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: false),
+                    Number = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
                     District = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false),
+                    City = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: false),
+                    ZipCode = table.Column<string>(type: "VARCHAR(8)", maxLength: 8, nullable: false),
+                    State = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "DATETIME", nullable: false),
                     LastUpdate = table.Column<DateTime>(type: "DATETIME", nullable: false),

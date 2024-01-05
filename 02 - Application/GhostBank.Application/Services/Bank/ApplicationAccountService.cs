@@ -5,7 +5,7 @@ using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces.Bank;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Models.Bank;
-using GhostBank.Domain.Requests;
+using GhostBank.Domain.Requests.Bank;
 
 namespace GhostBank.Application.Services.Bank;
 

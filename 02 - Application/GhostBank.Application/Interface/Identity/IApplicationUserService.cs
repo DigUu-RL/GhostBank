@@ -1,5 +1,5 @@
 ﻿using GhostBank.Application.DTOs;
-using GhostBank.Domain.Requests;
+using GhostBank.Domain.Requests.Identity;
 
 namespace GhostBank.Application.Interface.Identity;
 

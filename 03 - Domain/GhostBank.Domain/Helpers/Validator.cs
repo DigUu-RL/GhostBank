@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using GhostBank.Domain.Helpers.Extensions;
 
 namespace GhostBank.Domain.Helpers;
 
@@ -26,27 +27,37 @@ public static partial class Validator
 
 	public static bool IsCPF(string value)
 	{
-		var cleanCPF = new string(value.Where(char.IsDigit).ToArray());
+		var multiplyX = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+		var multiplyY = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 
-		if (cleanCPF.Length != 11)
+		value = value.Trim();
+		value = value.Remove(".").Remove("-");
+
+		if (value.Length != 11)
 			return false;
 
-		if (cleanCPF.Distinct().Count() == 1)
-			return false;
-
-		int[] cpfArray = cleanCPF.Select(x => int.Parse(x.ToString())).ToArray();
-		int sum1 = 0, sum2 = 0;
+		string tempCpf = value[..9];
+		int sum = 0;
 
 		for (int i = 0; i < 9; i++)
-		{
-			sum1 += cpfArray[i] * (10 - i);
-			sum2 += cpfArray[i] * (11 - i);
-		}
+			sum += int.Parse(tempCpf[i].ToString()) * multiplyX[i];
 
-		int digit1 = (sum1 % 11) < 2 ? 0 : 11 - (sum1 % 11);
-		int digit2 = (sum2 % 11) < 2 ? 0 : 11 - (sum2 % 11);
+		int module = sum % 11;
+		module = module < 2 ? 0 : 11 - module;
 
-		return digit1 == cpfArray[9] && digit2 == cpfArray[10];
+		string digit = module.ToString();
+		tempCpf += digit;
+
+		sum = 0;
+
+		for (int i = 0; i < 10; i++)
+			sum += int.Parse(tempCpf[i].ToString()) * multiplyY[i];
+
+		module = sum % 11;
+		module = module < 2 ? 0 : 11 - module;
+
+		digit += module.ToString();
+		return value.EndsWith(digit);
 	}
 
 	public static bool IsCNPJ(string value)

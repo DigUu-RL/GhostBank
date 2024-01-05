@@ -2,7 +2,7 @@
 using GhostBank.Application.Interface.Authentication;
 using GhostBank.Application.Interface.Bank;
 using GhostBank.Application.Interface.Identity;
-using GhostBank.Application.Services;
+using GhostBank.Application.Services.Authentication;
 using GhostBank.Application.Services.Bank;
 using GhostBank.Application.Services.Identity;
 using GhostBank.Domain.Interfaces.Authentication;
@@ -41,6 +41,8 @@ public static class ConfigureServiceCollection
 	{
 		services.AddDbContext<GhostBankContext>();
 		services.AddDbContext<GhostBankAuditContext>();
+
+		services.AddHttpContextAccessor();
 
 		#region AUDIT
 

@@ -4,7 +4,7 @@ using GhostBank.Application.DTOs.Bank;
 using GhostBank.Application.Interface.Bank;
 using GhostBank.Domain.Attributes;
 using GhostBank.Domain.Helpers;
-using GhostBank.Domain.Requests;
+using GhostBank.Domain.Requests.Bank;
 using GhostBank.Web.API.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,5 +44,23 @@ public class AccountController(IApplicationAccountService accountService) : Base
 	{
 		PaginatedListDTO<AccountDTO> accounts = await _accountService.GetWithExcludedAsync(search);
 		return Ok(accounts);
+	}
+
+	[HttpPost("create")]
+	public override async Task<IActionResult> Create([FromBody] AccountRequest request)
+	{
+		return Ok("Not implemented");
+	}
+
+	[HttpPut("update")]
+	public override async Task<IActionResult> Update([FromBody] AccountRequest request)
+	{
+		return Ok("Not implemented");
+	}
+
+	[HttpDelete("delete/{id}")]
+	public override async Task<IActionResult> Delete(Guid id)
+	{
+		return Ok("Not implemented");
 	}
 }

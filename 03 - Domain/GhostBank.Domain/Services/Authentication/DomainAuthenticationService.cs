@@ -1,7 +1,7 @@
 ﻿using GhostBank.Domain.Exceptions.Abstractions;
 using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces.Authentication;
-using GhostBank.Domain.Requests;
+using GhostBank.Domain.Requests.Authentication;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;

@@ -3,23 +3,31 @@ using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces.Identity;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Models.Identity;
-using GhostBank.Domain.Requests;
+using GhostBank.Domain.Requests.Identity;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Repository.Helpers;
 using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace GhostBank.Domain.Services.Identity;
 
-public class DomainUserService(IUserRepository userRepository, IUserClaimRepository userClaimRepository) : IDomainUserService
+public class DomainUserService(
+    IHttpContextAccessor contextAccessor, 
+    IUserRepository userRepository,
+    IUserClaimRepository userClaimRepository
+) : IDomainUserService
 {
+    private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IUserClaimRepository _userClaimRepository = userClaimRepository;
 
-    public async Task<UserModel> GetByIdAsync(Guid id)
+    private User User => _contextAccessor.HttpContext?.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException();
+
+	public async Task<UserModel> GetByIdAsync(Guid id)
     {
         User? user = await _userRepository.GetByIdAsync(id);
         return user is not null ? new UserModel(user) : throw new NotFoundException("Usuário não encontrado");
@@ -61,20 +69,31 @@ public class DomainUserService(IUserRepository userRepository, IUserClaimReposit
 
     public async Task CreateAsync(UserRequest request)
     {
-        var user = new User
-        {
-            FirstName = request.FirstName!,
-            LastName = request.LastName!,
-            CPF = request.CPF!,
-            CNPJ = request.CNPJ,
-            UserName = request.UserName!,
-            Email = request.Email!,
-            Cellphone = request.Cellphone!,
-            Role = request.Role,
-            Password = await Util.CreateHashAsync(request.Password!)
-        };
+		var user = new User
+		{
+			FirstName = request.FirstName!,
+			LastName = request.LastName!,
+			CPF = request.CPF!,
+			CNPJ = request.CNPJ,
+			UserName = request.UserName!,
+			Email = request.Email!,
+			Cellphone = request.Cellphone!,
+			Role = request.Role,
+			Password = await Util.CreateHashAsync(request.Password!),
+			Address = new Address
+			{
+				Street = request.Address!.Street!,
+				Number = request.Address!.Number,
+				District = request.Address!.District!,
+                City = request.Address!.City!,
+				ZipCode = request.Address!.ZipCode!,
+				State = request.Address!.State,
+                CreatedOn = DateTime.UtcNow,
+                LastUpdate = DateTime.UtcNow
+			}
+		};
 
-        await _userRepository.CreateAsync(user);
+		await _userRepository.CreateAsync(user);
         await _userRepository.CommitAsync();
 
         var claims = new List<UserClaim>

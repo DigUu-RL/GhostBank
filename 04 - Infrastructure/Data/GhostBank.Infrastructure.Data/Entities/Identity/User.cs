@@ -23,7 +23,10 @@ public class User : EntityBase, IPrincipal
 	public ICollection<UserClaim> Claims { get; set; } = [];
 	public ICollection<Account> Accounts { get; set; } = [];
 
-	[NotMapped]
+    [NotMapped]
+    public bool IsAdministrator => Role is UserRole.Administrator;
+
+    [NotMapped]
 	public IIdentity Identity => new GenericIdentity(Email);
 
 	public bool IsInRole(string role)

@@ -1,5 +1,5 @@
 ﻿using GhostBank.Application.DTOs.Bank;
-using GhostBank.Domain.Requests;
+using GhostBank.Domain.Requests.Bank;
 
 namespace GhostBank.Application.Interface.Bank;
 

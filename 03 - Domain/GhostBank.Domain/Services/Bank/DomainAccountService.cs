@@ -4,7 +4,7 @@ using GhostBank.Domain.Helpers.Extensions;
 using GhostBank.Domain.Interfaces.Bank;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Models.Bank;
-using GhostBank.Domain.Requests;
+using GhostBank.Domain.Requests.Bank;
 using GhostBank.Infrastructure.Data.Entities.Bank;
 using GhostBank.Infrastructure.Repository.Helpers;
 using GhostBank.Infrastructure.Repository.Interfaces;

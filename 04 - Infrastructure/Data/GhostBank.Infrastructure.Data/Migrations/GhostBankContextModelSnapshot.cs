@@ -203,6 +203,11 @@ namespace GhostBank.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("VARCHAR");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("DATETIME");
 
@@ -220,12 +225,13 @@ namespace GhostBank.Infrastructure.Data.Migrations
                         .HasColumnType("DATETIME");
 
                     b.Property<string>("Number")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("VARCHAR");
 
-                    b.Property<int>("State")
-                        .HasColumnType("int");
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("VARCHAR");
 
                     b.Property<string>("Street")
                         .IsRequired()
@@ -234,6 +240,11 @@ namespace GhostBank.Infrastructure.Data.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("VARCHAR");
 
                     b.HasKey("Id");
 

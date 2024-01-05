@@ -18,17 +18,30 @@ public class AddressMap : BaseMap<Address>
 			.Property(x => x.Number)
 			.HasColumnType("VARCHAR")
 			.HasMaxLength(255)
-			.IsRequired();
+			.IsRequired(false);
 
 		builder
 			.Property(x => x.District)
 			.HasColumnType("VARCHAR")
 			.HasMaxLength(255)
 			.IsRequired();
+		
+		builder
+			.Property(x => x.City)
+			.HasColumnType("VARCHAR")
+			.HasMaxLength(255)
+			.IsRequired();
+		
+		builder
+			.Property(x => x.ZipCode)
+			.HasColumnType("VARCHAR")
+			.HasMaxLength(8)
+			.IsRequired();
 
 		builder
-			.Property(x => x.Street)
+			.Property(x => x.State)
 			.HasColumnType("VARCHAR")
+			.HasMaxLength(255)
 			.IsRequired();
 
 		builder

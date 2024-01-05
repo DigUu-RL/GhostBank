@@ -22,6 +22,6 @@ public static class StringExtensions
 	/// <returns>A new <see langword="string"/> without the specified term</returns>
 	public static string Remove(this string s, string term)
 	{
-		return s.Remove(s.IndexOf(term), s.Length);
+		return s.Replace(term, string.Empty);
 	}
 }

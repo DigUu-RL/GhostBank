@@ -25,7 +25,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 			context.Result = new JsonResult(new
 			{
 				statusCode = HttpStatusCode.Unauthorized,
-				error = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(HttpStatusCode.Unauthorized.ToString()),
+				error = HttpStatusCode.Unauthorized.ToString(),
 				message = "Não autenticado"
 			});
 		}

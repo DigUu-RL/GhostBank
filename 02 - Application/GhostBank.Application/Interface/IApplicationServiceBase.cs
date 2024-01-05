@@ -1,5 +1,6 @@
 ﻿using GhostBank.Application.DTOs;
 using GhostBank.Domain.Helpers;
+using GhostBank.Infrastructure.Data.Entities.Identity;
 
 namespace GhostBank.Application.Interface;
 

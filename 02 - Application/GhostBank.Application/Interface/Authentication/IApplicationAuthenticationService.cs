@@ -1,6 +1,6 @@
 ﻿using GhostBank.Application.DTOs;
 using GhostBank.Domain.Helpers;
-using GhostBank.Domain.Requests;
+using GhostBank.Domain.Requests.Authentication;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 
