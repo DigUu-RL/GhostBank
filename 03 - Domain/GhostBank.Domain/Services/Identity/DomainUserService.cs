@@ -1,6 +1,7 @@
 ﻿using GhostBank.Domain.Exceptions.Abstractions;
 using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces.Identity;
+using GhostBank.Domain.Jobs.Bank;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Models.Identity;
 using GhostBank.Domain.Requests.Identity;
@@ -10,6 +11,7 @@ using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 

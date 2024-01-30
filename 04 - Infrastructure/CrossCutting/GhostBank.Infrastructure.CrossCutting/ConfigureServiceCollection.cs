@@ -24,6 +24,7 @@ using GhostBank.Infrastructure.Repository.Repositories.Audit;
 using GhostBank.Infrastructure.Repository.Repositories.Audit.Identity;
 using GhostBank.Infrastructure.Repository.Repositories.Bank;
 using GhostBank.Infrastructure.Repository.Repositories.Identity;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -87,14 +88,6 @@ public static class ConfigureServiceCollection
 		services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 		return services;
-	}
-
-	public static IApplicationBuilder AddMiddlewares(this IApplicationBuilder builder)
-	{
-		builder.UseMiddleware(typeof(ExceptionHandlerMiddleware));
-		builder.UseMiddleware(typeof(JwtMiddleware));
-
-		return builder;
 	}
 
 	public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
@@ -173,6 +166,17 @@ public static class ConfigureServiceCollection
 				x.SubstituteApiVersionInUrl = true;
 			});
 
+		services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("GhostBankHangfire")));
+		services.AddHangfireServer();
+
 		return services;
+	}
+
+	public static IApplicationBuilder AddMiddlewares(this IApplicationBuilder builder)
+	{
+		builder.UseMiddleware(typeof(ExceptionHandlerMiddleware));
+		builder.UseMiddleware(typeof(JwtMiddleware));
+
+		return builder;
 	}
 }
