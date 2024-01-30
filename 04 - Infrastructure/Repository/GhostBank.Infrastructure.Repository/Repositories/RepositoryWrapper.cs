@@ -7,12 +7,12 @@ using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 namespace GhostBank.Infrastructure.Repository.Repositories;
 
 public class RepositoryWrapper(
-    IAccountRepository accountRepository, 
-    IUserRepository userRepository, 
-    IUserClaimRepository userClaimRepository
+	IAccountRepository accountRepository,
+	IUserRepository userRepository,
+	IUserClaimRepository userClaimRepository
 ) : IRepositoryWrapper
 {
-    public IBaseRepository<Account> Account { get; } = accountRepository;
-    public IBaseRepository<User> User { get; } = userRepository;
+	public IBaseRepository<Account> Account { get; } = accountRepository;
+	public IBaseRepository<User> User { get; } = userRepository;
 	public IBaseRepository<UserClaim> UserClaim { get; } = userClaimRepository;
 }

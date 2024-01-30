@@ -1,7 +1,6 @@
 ﻿using GhostBank.Domain.Interfaces.Authentication;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 

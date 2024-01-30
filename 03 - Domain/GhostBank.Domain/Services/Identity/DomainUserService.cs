@@ -16,59 +16,63 @@ using Microsoft.EntityFrameworkCore;
 namespace GhostBank.Domain.Services.Identity;
 
 public class DomainUserService(
-    IHttpContextAccessor contextAccessor, 
-    IUserRepository userRepository,
-    IUserClaimRepository userClaimRepository
+	IHttpContextAccessor contextAccessor,
+	IUserRepository userRepository,
+	IUserClaimRepository userClaimRepository
 ) : IDomainUserService
 {
-    private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
-    private readonly IUserRepository _userRepository = userRepository;
-    private readonly IUserClaimRepository _userClaimRepository = userClaimRepository;
+	private readonly IHttpContextAccessor _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
+	private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 
-    private User User => _contextAccessor.HttpContext?.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException();
+	private readonly IUserClaimRepository _userClaimRepository =
+		userClaimRepository ?? throw new ArgumentNullException(nameof(userClaimRepository));
+
+	private User User => _contextAccessor.HttpContext?.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException();
 
 	public async Task<UserModel> GetByIdAsync(Guid id)
-    {
-        User? user = await _userRepository.GetByIdAsync(id);
-        return user is not null ? new UserModel(user) : throw new NotFoundException("Usuário não encontrado");
-    }
+	{
+		User user = await _userRepository.GetByIdAsync(id) ?? throw new NotFoundException("Usuário não encontrado");
 
-    public async Task<List<UserModel>> GetAllAsync()
-    {
-        List<User> users = await _userRepository.GetAllAsync();
-        return users.Select(x => new UserModel(x)).ToList();
-    }
+		var model = new UserModel(user);
+		return model;
+	}
 
-    public async Task<PaginatedListModel<UserModel>> GetAsync(Search<UserRequest> search)
-    {
-        Specification<User> specification = GetSpecification(search);
-        PaginatedList<User> result = await _userRepository.GetAsync(search.Page, search.Quantity, specification);
+	public async Task<List<UserModel>> GetAllAsync()
+	{
+		List<User> users = await _userRepository.GetAllAsync();
+		return users.Select(x => new UserModel(x)).ToList();
+	}
 
-        return new PaginatedListModel<UserModel>
-        {
-            Page = result.Page,
-            Pages = result.Pages,
-            Total = result.Total,
-            Data = result.Select(x => new UserModel(x)).ToList()
-        };
-    }
+	public async Task<PaginatedListModel<UserModel>> GetAsync(Search<UserRequest> search)
+	{
+		Specification<User> specification = GetSpecification(search);
+		PaginatedList<User> result = await _userRepository.GetAsync(search.Page, search.Quantity, specification);
 
-    public async Task<PaginatedListModel<UserModel>> GetWithExcludedAsync(Search<UserRequest> search)
-    {
-        Specification<User> specification = GetSpecification(search);
-        PaginatedList<User> result = await _userRepository.GetWithExcludedAsync(search.Page, search.Quantity, specification);
+		return new PaginatedListModel<UserModel>
+		{
+			Page = result.Page,
+			Pages = result.Pages,
+			Total = result.Total,
+			Data = result.Select(x => new UserModel(x)).ToList()
+		};
+	}
 
-        return new PaginatedListModel<UserModel>
-        {
-            Page = result.Page,
-            Pages = result.Pages,
-            Total = result.Total,
-            Data = result.Select(x => new UserModel(x)).ToList()
-        };
-    }
+	public async Task<PaginatedListModel<UserModel>> GetWithExcludedAsync(Search<UserRequest> search)
+	{
+		Specification<User> specification = GetSpecification(search);
+		PaginatedList<User> result = await _userRepository.GetWithExcludedAsync(search.Page, search.Quantity, specification);
 
-    public async Task CreateAsync(UserRequest request)
-    {
+		return new PaginatedListModel<UserModel>
+		{
+			Page = result.Page,
+			Pages = result.Pages,
+			Total = result.Total,
+			Data = result.Select(x => new UserModel(x)).ToList()
+		};
+	}
+
+	public async Task CreateAsync(UserRequest request)
+	{
 		var user = new User
 		{
 			FirstName = request.FirstName!,
@@ -85,95 +89,95 @@ public class DomainUserService(
 				Street = request.Address!.Street!,
 				Number = request.Address!.Number,
 				District = request.Address!.District!,
-                City = request.Address!.City!,
+				City = request.Address!.City!,
 				ZipCode = request.Address!.ZipCode!,
 				State = request.Address!.State,
-                CreatedOn = DateTime.UtcNow,
-                LastUpdate = DateTime.UtcNow
+				CreatedOn = DateTime.UtcNow,
+				LastUpdate = DateTime.UtcNow
 			}
 		};
 
 		await _userRepository.CreateAsync(user);
-        await _userRepository.CommitAsync();
+		await _userRepository.CommitAsync();
 
-        var claims = new List<UserClaim>
-        {
-            new(nameof(User.Id), user.Id.ToString()),
-            new(nameof(User.UserName), user.UserName),
-            new(nameof(User.Email), user.Email),
-            new(nameof(User.Role), user.Role.ToString())
-        };
+		var claims = new List<UserClaim>
+		{
+			new(nameof(User.Id), user.Id.ToString()),
+			new(nameof(User.UserName), user.UserName),
+			new(nameof(User.Email), user.Email),
+			new(nameof(User.Role), user.Role.ToString())
+		};
 
-        claims.ForEach(x => x.UserId = user.Id);
+		claims.ForEach(x => x.UserId = user.Id);
 
-        await _userClaimRepository.CreateAsync([.. claims]);
-        await _userClaimRepository.CommitAsync();
-
-        await _userRepository.GrantDataBaseAccess(user);
-    }
-
-    public async Task UpdateAsync(UserRequest request)
-    {
-        _userRepository.With(x => x.Include(user => user.Claims));
-
-        User user = await _userRepository.GetByIdAsync(request.Id.GetValueOrDefault()) ?? throw new NotFoundException("Usuário não encontrado");
-
-        user.FirstName = request.FirstName!;
-        user.LastName = request.LastName!;
-        user.UserName = request.UserName!;
-        user.Email = request.Email!;
-        user.Cellphone = request.Cellphone!;
-        user.Role = request.Role;
-
-        await _userRepository.UpdateAsync(user);
-        await _userRepository.CommitAsync();
-
-        var claims = new List<UserClaim>
-        {
-            new(nameof(User.Id), user.Id.ToString()),
-            new(nameof(User.UserName), user.UserName),
-            new(nameof(User.Email), user.Email),
-            new(nameof(User.Role), user.Role.ToString())
-        };
-
-        await _userClaimRepository.UpdateAsync(user.Id, [.. claims]);
-        await _userClaimRepository.CommitAsync();
+		await _userClaimRepository.CreateAsync([.. claims]);
+		await _userClaimRepository.CommitAsync();
 
 		await _userRepository.GrantDataBaseAccess(user);
 	}
 
-    public async Task DeleteAsync(Guid id)
-    {
-        User user = await _userRepository.GetByIdAsync(id) ?? throw new NotFoundException("Usuário não encontrado");
+	public async Task UpdateAsync(UserRequest request)
+	{
+		_userRepository.With(x => x.Include(user => user.Claims));
 
-        try
-        {
-            await _userRepository.DeleteAsync(user);
-            await _userRepository.CommitAsync();
-        }
-        catch (Exception)
-        {
-            user.Excluded = true;
+		User user = await _userRepository.GetByIdAsync(request.Id.GetValueOrDefault()) ?? throw new NotFoundException("Usuário não encontrado");
 
-            await _userRepository.UpdateAsync(user);
-            await _userRepository.CommitAsync();
-        }
-    }
+		user.FirstName = request.FirstName!;
+		user.LastName = request.LastName!;
+		user.UserName = request.UserName!;
+		user.Email = request.Email!;
+		user.Cellphone = request.Cellphone!;
+		user.Role = request.Role;
 
-    private static Specification<User> GetSpecification(Search<UserRequest> search)
-    {
-        Specification<User> specification = new TrueSpecification<User>();
+		await _userRepository.UpdateAsync(user);
+		await _userRepository.CommitAsync();
 
-        if (search.Filter is not null)
-        {
-            if (search.Filter.Id.HasValue)
-                specification &= UserSpecification.ById(search.Filter.Id.Value);
+		var claims = new List<UserClaim>
+		{
+			new(nameof(User.Id), user.Id.ToString()),
+			new(nameof(User.UserName), user.UserName),
+			new(nameof(User.Email), user.Email),
+			new(nameof(User.Role), user.Role.ToString())
+		};
 
-            if (!string.IsNullOrEmpty(search.Filter.FirstName))
-                specification &= UserSpecification.ByFirstName(search.Filter.FirstName);
+		await _userClaimRepository.UpdateAsync(user.Id, [.. claims]);
+		await _userClaimRepository.CommitAsync();
 
-            if (!string.IsNullOrEmpty(search.Filter.LastName))
-                specification &= UserSpecification.ByLastName(search.Filter.LastName);
+		await _userRepository.GrantDataBaseAccess(user);
+	}
+
+	public async Task DeleteAsync(Guid id)
+	{
+		User user = await _userRepository.GetByIdAsync(id) ?? throw new NotFoundException("Usuário não encontrado");
+
+		try
+		{
+			await _userRepository.DeleteAsync(user);
+			await _userRepository.CommitAsync();
+		}
+		catch (Exception)
+		{
+			user.Excluded = true;
+
+			await _userRepository.UpdateAsync(user);
+			await _userRepository.CommitAsync();
+		}
+	}
+
+	private static Specification<User> GetSpecification(Search<UserRequest> search)
+	{
+		Specification<User> specification = new TrueSpecification<User>();
+
+		if (search.Filter is not null)
+		{
+			if (search.Filter.Id.HasValue)
+				specification &= UserSpecification.ById(search.Filter.Id.Value);
+
+			if (!string.IsNullOrEmpty(search.Filter.FirstName))
+				specification &= UserSpecification.ByFirstName(search.Filter.FirstName);
+
+			if (!string.IsNullOrEmpty(search.Filter.LastName))
+				specification &= UserSpecification.ByLastName(search.Filter.LastName);
 
 			if (!string.IsNullOrEmpty(search.Filter.CPF))
 				specification &= UserSpecification.ByCPF(search.Filter.CPF);
@@ -182,15 +186,15 @@ public class DomainUserService(
 				specification &= UserSpecification.ByCNPJ(search.Filter.CNPJ);
 
 			if (!string.IsNullOrEmpty(search.Filter.UserName))
-                specification &= UserSpecification.ByUserName(search.Filter.UserName);
+				specification &= UserSpecification.ByUserName(search.Filter.UserName);
 
-            if (!string.IsNullOrEmpty(search.Filter.Email))
-                specification &= UserSpecification.ByEmail(search.Filter.Email);
+			if (!string.IsNullOrEmpty(search.Filter.Email))
+				specification &= UserSpecification.ByEmail(search.Filter.Email);
 
 			if (!string.IsNullOrEmpty(search.Filter.Cellphone))
 				specification &= UserSpecification.ByCellphone(search.Filter.Cellphone);
 		}
 
-        return specification;
-    }
+		return specification;
+	}
 }

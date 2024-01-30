@@ -1,6 +1,6 @@
 ﻿namespace GhostBank.Infrastructure.Data.Enums.Bank;
 
-public enum PixType 
+public enum PixType
 {
 	CPF,
 	CNPJ,

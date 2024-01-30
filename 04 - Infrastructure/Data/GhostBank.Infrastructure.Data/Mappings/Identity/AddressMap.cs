@@ -25,13 +25,13 @@ public class AddressMap : BaseMap<Address>
 			.HasColumnType("VARCHAR")
 			.HasMaxLength(255)
 			.IsRequired();
-		
+
 		builder
 			.Property(x => x.City)
 			.HasColumnType("VARCHAR")
 			.HasMaxLength(255)
 			.IsRequired();
-		
+
 		builder
 			.Property(x => x.ZipCode)
 			.HasColumnType("VARCHAR")

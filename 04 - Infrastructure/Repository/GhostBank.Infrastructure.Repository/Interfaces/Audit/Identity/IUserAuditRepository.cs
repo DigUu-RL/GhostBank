@@ -2,6 +2,6 @@
 
 namespace GhostBank.Infrastructure.Repository.Interfaces.Audit.Identity;
 
-public interface IUserLogRepository : IBaseLogRepository<UserAudit>
+public interface IUserAuditRepository : IBaseAuditRepository<UserAudit>
 {
 }

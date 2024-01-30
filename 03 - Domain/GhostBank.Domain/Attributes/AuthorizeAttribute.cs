@@ -1,9 +1,7 @@
 ﻿using GhostBank.Infrastructure.Data.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Globalization;
 using System.Net;
 
 namespace GhostBank.Domain.Attributes;

@@ -5,7 +5,7 @@ namespace GhostBank.Infrastructure.Repository.Interfaces;
 
 public interface IRepositoryWrapper
 {
-    IBaseRepository<Account> Account { get; }
-    IBaseRepository<User> User { get; }
-    IBaseRepository<UserClaim> UserClaim { get; }
+	IBaseRepository<Account> Account { get; }
+	IBaseRepository<User> User { get; }
+	IBaseRepository<UserClaim> UserClaim { get; }
 }

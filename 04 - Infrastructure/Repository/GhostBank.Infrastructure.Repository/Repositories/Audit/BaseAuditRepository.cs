@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GhostBank.Infrastructure.Repository.Repositories.Audit;
 
-public class BaseLogRepository<TEntity>(GhostBankAuditContext context) : IBaseLogRepository<TEntity> where TEntity : EntityAuditBase
+public class BaseAuditRepository<TEntity>(GhostBankAuditContext context) : IBaseAuditRepository<TEntity> where TEntity : EntityAuditBase
 {
 	private readonly GhostBankAuditContext _context = context ?? throw new ArgumentNullException(nameof(context));
 	private readonly DbSet<TEntity> _entity = context.Set<TEntity>();

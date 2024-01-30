@@ -3,7 +3,7 @@
 public enum SqlAction
 {
 	Select,
-	Insert, 
+	Insert,
 	Update,
 	Delete
 }

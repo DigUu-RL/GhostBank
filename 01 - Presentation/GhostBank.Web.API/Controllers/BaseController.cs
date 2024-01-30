@@ -6,18 +6,18 @@ namespace GhostBank.Web.API.Controllers;
 
 public abstract class BaseController<TRequest> : Controller where TRequest : class
 {
-	protected new User User 
+	protected new User User
 	{
-		get => HttpContext.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException(); 
+		get => HttpContext.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException();
 	}
 
 	public virtual Task<IActionResult> GetById(Guid id) => throw new NotImplementedException("Recurso ainda não implementado");
 	public virtual Task<IActionResult> GetAll() => throw new NotImplementedException("Recurso ainda não implementado");
 
-	public virtual Task<IActionResult> Get([FromQuery] Search<TRequest> search) => 
+	public virtual Task<IActionResult> Get([FromQuery] Search<TRequest> search) =>
 		throw new NotImplementedException("Recurso ainda não implementado");
 
-	public virtual Task<IActionResult> GetWithExcluded([FromQuery] Search<TRequest> search) => 
+	public virtual Task<IActionResult> GetWithExcluded([FromQuery] Search<TRequest> search) =>
 		throw new NotImplementedException("Recurso ainda não implementado");
 
 	public virtual Task<IActionResult> Create([FromBody] TRequest request) => throw new NotImplementedException("Recurso ainda não implementado");

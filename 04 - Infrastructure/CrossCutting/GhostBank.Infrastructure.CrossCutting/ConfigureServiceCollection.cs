@@ -48,11 +48,11 @@ public static class ConfigureServiceCollection
 
 		#region IDENTITY
 
-		services.AddScoped(typeof(IUserLogRepository), typeof(UserLogRepository));
+		services.AddScoped(typeof(IUserAuditRepository), typeof(UserAuditRepository));
 
 		#endregion
 
-		services.AddScoped(typeof(IBaseLogRepository<>), typeof(BaseLogRepository<>));
+		services.AddScoped(typeof(IBaseAuditRepository<>), typeof(BaseAuditRepository<>));
 
 		#endregion
 

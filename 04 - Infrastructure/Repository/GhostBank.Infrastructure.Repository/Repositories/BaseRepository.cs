@@ -6,8 +6,6 @@ using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 
 namespace GhostBank.Infrastructure.Repository.Repositories;
 

@@ -3,7 +3,7 @@ using GhostBank.Infrastructure.Repository.Specifications;
 
 namespace GhostBank.Infrastructure.Repository.Interfaces.Audit;
 
-public interface IBaseLogRepository<TEntity> where TEntity : EntityAuditBase
+public interface IBaseAuditRepository<TEntity> where TEntity : EntityAuditBase
 {
 	IQueryable<TEntity> Query(Specification<TEntity>? specification = null);
 	Task<List<TEntity>> GetAllAsync();

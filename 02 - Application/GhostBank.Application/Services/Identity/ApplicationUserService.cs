@@ -15,7 +15,7 @@ using InvalidDataException = GhostBank.Domain.Exceptions.Abstractions.InvalidDat
 namespace GhostBank.Application.Services.Identity;
 
 public class ApplicationUserService(
-	IHttpContextAccessor contextAccessor, 
+	IHttpContextAccessor contextAccessor,
 	IDomainUserService userService
 ) : IApplicationUserService
 {
@@ -134,7 +134,7 @@ public class ApplicationUserService(
 				throw new InvalidDataException("O estado informado é inválido");
 
 			request.Address.ZipCode = request.Address.ZipCode.Remove(".").Remove("-");
-		} 
+		}
 		else
 		{
 			throw new CannotProcessException("É obrigatório informar um endereço", HttpStatusCode.UnprocessableEntity);

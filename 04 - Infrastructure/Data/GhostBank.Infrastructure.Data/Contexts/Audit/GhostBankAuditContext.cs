@@ -6,12 +6,12 @@ namespace GhostBank.Infrastructure.Data.Contexts.Audit;
 
 public class GhostBankAuditContext : DbContext
 {
-    private readonly IConfiguration _configuration;
+	private readonly IConfiguration _configuration;
 
-    public GhostBankAuditContext()
-    {
+	public GhostBankAuditContext()
+	{
 
-    }
+	}
 
 	public GhostBankAuditContext(IConfiguration configuration)
 	{

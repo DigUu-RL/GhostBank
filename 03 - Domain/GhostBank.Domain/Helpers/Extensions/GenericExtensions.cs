@@ -1,7 +1,6 @@
-﻿using System.Net;
+﻿using GhostBank.Domain.Exceptions.Abstractions;
+using System.Net;
 using System.Reflection;
-using GhostBank.Domain.Exceptions.Abstractions;
-using InvalidDataException = GhostBank.Domain.Exceptions.Abstractions.InvalidDataException;
 namespace GhostBank.Domain.Helpers.Extensions;
 
 public static class GenericExtensions

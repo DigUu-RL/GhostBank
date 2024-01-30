@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using GhostBank.Domain.Helpers.Extensions;
+﻿using GhostBank.Domain.Helpers.Extensions;
+using System.Text.RegularExpressions;
 
 namespace GhostBank.Domain.Helpers;
 
