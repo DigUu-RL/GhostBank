@@ -1,5 +1,7 @@
-﻿using GhostBank.Application.Interface.Authentication;
+﻿using GhostBank.Application.DTOs.Authentication;
+using GhostBank.Application.Interface.Authentication;
 using GhostBank.Domain.Interfaces.Authentication;
+using GhostBank.Domain.Models.Authentication;
 using GhostBank.Domain.Requests.Authentication;
 using Microsoft.AspNetCore.Http;
 using InvalidDataException = GhostBank.Domain.Exceptions.Abstractions.InvalidDataException;
@@ -10,10 +12,17 @@ public class ApplicationAuthenticationService(IDomainAuthenticationService authe
 {
 	private readonly IDomainAuthenticationService _authenticationService = authenticationService;
 
-	public async Task<string> AuthenticateAsync(SignInRequest request, HttpContext context)
+	public async Task<AccessTokenDTO> AuthenticateAsync(SignInRequest request, HttpContext context)
 	{
-		string token = await _authenticationService.AuthenticateAsync(request, context);
-		return token;
+		AccessTokenModel model = await _authenticationService.AuthenticateAsync(request, context);
+
+		var accessToken = new AccessTokenDTO
+		{
+			ExpiresIn = model.ExpiresIn,
+			Token = model.Token
+		};
+
+		return accessToken;
 	}
 
 	public async Task<Guid> GetUserAsync(SignInRequest request)

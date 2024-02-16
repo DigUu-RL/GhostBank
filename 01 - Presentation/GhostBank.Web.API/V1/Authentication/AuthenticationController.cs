@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using GhostBank.Application.DTOs;
+using GhostBank.Application.DTOs.Authentication;
 using GhostBank.Application.Interface.Authentication;
 using GhostBank.Domain.Requests.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -31,8 +32,8 @@ public class AuthenticationController(
 
 		request.UserId = userId;
 
-		string token = await _authenticationService.AuthenticateAsync(request, HttpContext);
-		return Ok(new { token });
+		AccessTokenDTO token = await _authenticationService.AuthenticateAsync(request, HttpContext);
+		return Ok(token);
 	}
 
 	[Authorize]

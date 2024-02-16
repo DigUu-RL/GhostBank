@@ -1,6 +1,7 @@
 ﻿using GhostBank.Domain.Exceptions.Abstractions;
 using GhostBank.Domain.Helpers.Extensions;
 using GhostBank.Domain.Interfaces.Authentication;
+using GhostBank.Domain.Models.Authentication;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,7 @@ public class DomainJwtService(IConfiguration configuration, IUserRepository user
 	private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 	private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
-	public string GenerateToken(User user)
+	public AccessTokenModel GenerateToken(User user)
 	{
 		byte[] key = Encoding.UTF8.GetBytes(_jwtSection.GetValue<string>("Key")!);
 
@@ -38,14 +39,22 @@ public class DomainJwtService(IConfiguration configuration, IUserRepository user
 		var securityKey = new SymmetricSecurityKey(key);
 		var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+		DateTime expires = DateTime.UtcNow.AddHours(2);
+
 		var token = new JwtSecurityToken(
 			issuer,
 			audience,
 			claims,
-			expires: DateTime.UtcNow.AddHours(2),
+			expires: expires,
 			signingCredentials: credentials);
 
-		return _tokenHandler.WriteToken(token);
+		var accessToken = new AccessTokenModel
+		{
+			ExpiresIn = expires,
+			Token = _tokenHandler.WriteToken(token)
+		};
+
+		return accessToken;
 	}
 
 	public async Task<User> ValidateTokenAsync(string token)
