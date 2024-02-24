@@ -9,6 +9,6 @@ public class HealthController : Controller
 	[HttpGet]
 	public IActionResult Index()
 	{
-		return Ok("Relax, I'm healthy! :)");
+		return Ok("Relax. I'm healthy! :)");
 	}
 }
