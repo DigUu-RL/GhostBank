@@ -16,6 +16,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddDependencyInjection();
 builder.Services.ConfigureServices(builder.Configuration);
 
+await builder.Services.EnsureDatabaseAsync(builder.Configuration);
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.

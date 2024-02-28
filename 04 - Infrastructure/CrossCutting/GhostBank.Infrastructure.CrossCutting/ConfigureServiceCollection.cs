@@ -172,6 +172,24 @@ public static class ConfigureServiceCollection
 		return services;
 	}
 
+	public static async Task<IServiceCollection> EnsureDatabaseAsync(this IServiceCollection services, IConfiguration configuration)
+	{
+		using (var context = new GhostBankContext(configuration))
+		{
+			if (await context.Database.CanConnectAsync())
+				await context.Database.EnsureCreatedAsync();
+		}
+
+		using (var context = new GhostBankAuditContext(configuration))
+		{
+			if (await context.Database.CanConnectAsync())
+				await context.Database.EnsureCreatedAsync();
+
+		}
+
+		return services;
+	}
+
 	public static IApplicationBuilder AddMiddlewares(this IApplicationBuilder builder)
 	{
 		builder.UseMiddleware(typeof(ExceptionHandlerMiddleware));
