@@ -176,13 +176,13 @@ public static class ConfigureServiceCollection
 	{
 		using (var context = new GhostBankContext(configuration))
 		{
-			if (await context.Database.CanConnectAsync())
+			if (!await context.Database.CanConnectAsync())
 				await context.Database.EnsureCreatedAsync();
 		}
 
 		using (var context = new GhostBankAuditContext(configuration))
 		{
-			if (await context.Database.CanConnectAsync())
+			if (!await context.Database.CanConnectAsync())
 				await context.Database.EnsureCreatedAsync();
 
 		}
