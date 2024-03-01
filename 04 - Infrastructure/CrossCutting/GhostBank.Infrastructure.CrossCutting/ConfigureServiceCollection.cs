@@ -80,6 +80,7 @@ public static class ConfigureServiceCollection
 		services.AddScoped(typeof(IApplicationAuthenticationService), typeof(ApplicationAuthenticationService));
 		services.AddScoped(typeof(IDomainAuthenticationService), typeof(DomainAuthenticationService));
 
+		services.AddScoped(typeof(IApplicationJwtService), typeof(ApplicationJwtService));
 		services.AddScoped(typeof(IDomainJwtService), typeof(DomainJwtService));
 
 		#endregion
