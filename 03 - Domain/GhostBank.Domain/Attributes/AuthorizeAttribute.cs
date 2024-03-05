@@ -1,4 +1,5 @@
-﻿using GhostBank.Infrastructure.Data.Entities.Identity;
+﻿using GhostBank.Domain.Models;
+using GhostBank.Infrastructure.Data.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -20,11 +21,11 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 		{
 			context.HttpContext.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
 
-			context.Result = new JsonResult(new
+			context.Result = new JsonResult(new ErrorModel
 			{
-				statusCode = HttpStatusCode.Unauthorized,
-				error = HttpStatusCode.Unauthorized.ToString(),
-				message = "Não autenticado"
+				StatusCode = (int) HttpStatusCode.Unauthorized,
+				Error = nameof(HttpStatusCode.Unauthorized),
+				Message = "Não autenticado"
 			});
 		}
 	}

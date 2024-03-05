@@ -5,7 +5,7 @@ using System.Security.Principal;
 
 namespace GhostBank.Infrastructure.Data.Entities.Identity;
 
-public class User : EntityBase, IPrincipal
+public class User : EntityBase, IIdentity
 {
 	public string FirstName { get; set; } = null!;
 	public string LastName { get; set; } = null!;
@@ -27,15 +27,13 @@ public class User : EntityBase, IPrincipal
 	public bool IsAdministrator => Role is UserRole.Administrator;
 
 	[NotMapped]
-	public IIdentity Identity => new GenericIdentity(Email);
+	public string? AuthenticationType => "JWT";
 
-	public bool IsInRole(string role)
-	{
-		if (Enum.TryParse(role, out UserRole userRole))
-			return userRole == Role;
+	[NotMapped]
+	public bool IsAuthenticated { get; set; }
 
-		return false;
-	}
+	[NotMapped]
+	public string? Name => $"{FirstName} {LastName}";
 
 	public override string ToString()
 	{

@@ -28,7 +28,7 @@ public class DomainAuthenticationService(IDomainJwtService jwtService, IUserRepo
 		AccessTokenModel token = _jwtService.GenerateToken(user);
 
 		context.User = new ClaimsPrincipal(user);
-		Thread.CurrentPrincipal = user;
+		user.IsAuthenticated = true;
 
 		return token;
 	}

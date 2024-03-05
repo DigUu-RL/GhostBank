@@ -1,4 +1,5 @@
 ﻿using GhostBank.Domain.Exceptions;
+using GhostBank.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Net;
@@ -34,12 +35,12 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
 		if (ex is not BaseException)
 			statusCode = HttpStatusCode.InternalServerError;
 
-		var response = new
+		var response = new ErrorModel
 		{
-			statusCode,
-			error = statusCode.ToString(),
-			message = ex.Message,
-			inner = ex.InnerException?.Message
+			StatusCode = (int) statusCode,
+			Error = statusCode.ToString(),
+			Message = ex.Message,
+			Inner = ex.InnerException?.Message
 		};
 
 		string json = JsonConvert.SerializeObject(response);

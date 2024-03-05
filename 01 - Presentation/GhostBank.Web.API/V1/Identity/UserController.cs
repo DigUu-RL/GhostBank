@@ -5,7 +5,9 @@ using GhostBank.Domain.Attributes;
 using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Requests.Identity;
 using GhostBank.Web.API.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AuthorizeAttribute = GhostBank.Domain.Attributes.AuthorizeAttribute;
 
 namespace GhostBank.Web.API.V1.Identity;
 
