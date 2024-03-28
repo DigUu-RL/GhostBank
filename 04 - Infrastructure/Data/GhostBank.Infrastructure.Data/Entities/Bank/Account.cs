@@ -16,4 +16,5 @@ public class Account : EntityBase
 	public User User { get; set; } = null!;
 	public ICollection<Pix> Pix { get; set; } = [];
 	public ICollection<Card> Cards { get; set; } = [];
+	public ICollection<AccountTransaction> Transactions { get; set; } = [];
 }

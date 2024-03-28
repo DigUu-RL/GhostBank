@@ -47,7 +47,7 @@ public class AccountMap : BaseMap<Account>
 			.OnDelete(DeleteBehavior.Cascade);
 
 		builder
-			.HasMany(x => x.Cards)
+			.HasMany(x => x.Transactions)
 			.WithOne(x => x.Account)
 			.HasForeignKey(x => x.AccountId)
 			.OnDelete(DeleteBehavior.Cascade);

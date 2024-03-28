@@ -7,8 +7,7 @@ namespace GhostBank.Infrastructure.Data.Entities.Identity;
 
 public class User : EntityBase, IIdentity
 {
-	public string FirstName { get; set; } = null!;
-	public string LastName { get; set; } = null!;
+	public string Name { get; set; } = null!;
 	public string CPF { get; set; } = null!;
 	public string? CNPJ { get; set; }
 	public string UserName { get; set; } = null!;
@@ -30,10 +29,7 @@ public class User : EntityBase, IIdentity
 	public string? AuthenticationType => "JWT";
 
 	[NotMapped]
-	public bool IsAuthenticated { get; set; }
-
-	[NotMapped]
-	public string? Name => $"{FirstName} {LastName}";
+	public bool IsAuthenticated { get; set; } = false;
 
 	public override string ToString()
 	{

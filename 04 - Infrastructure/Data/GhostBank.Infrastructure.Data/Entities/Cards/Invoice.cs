@@ -6,6 +6,7 @@ public class Invoice : EntityBase
 	public decimal PaidAmount { get; set; }
 	public DateTime ExpirationDate { get; set; }
 	public bool IsPaid { get; set; }
+	public bool IsParcialPaid { get; set; }
 
 	// relationships
 	public Guid CardId { get; set; }
