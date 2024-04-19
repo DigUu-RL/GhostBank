@@ -20,7 +20,7 @@ public class DomainAuthenticationService(IDomainJwtService jwtService, IUserRepo
 
 	public async Task<AccessTokenModel> AuthenticateAsync(SignInRequest request, HttpContext context)
 	{
-		_userRepository.With(x => x.Include(user => user.Claims));
+		_userRepository.With(x => x.Claims);
 
 		User user = await _userRepository.GetByIdAsync(request.UserId) ??
 			throw new NotFoundException("Usuário não encontrado");

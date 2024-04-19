@@ -46,7 +46,8 @@ public class DomainJwtService(IConfiguration configuration, IUserRepository user
 			audience,
 			claims,
 			expires: expires,
-			signingCredentials: credentials);
+			signingCredentials: credentials
+		);
 
 		var accessToken = new AccessTokenModel
 		{

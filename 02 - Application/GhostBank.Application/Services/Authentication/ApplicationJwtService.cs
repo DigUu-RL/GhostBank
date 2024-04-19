@@ -20,8 +20,7 @@ public class ApplicationJwtService(IDomainJwtService jwtService) : IApplicationJ
 		return new UserDTO
 		{
 			Id = user.Id,
-			FirstName = user.FirstName,
-			LastName = user.LastName,
+			Name = user.Name,
 			UserName = user.UserName,
 			Email = user.Email,
 			Role = user.Role

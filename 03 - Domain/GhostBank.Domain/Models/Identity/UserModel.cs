@@ -8,8 +8,7 @@ namespace GhostBank.Domain.Models.Identity;
 public class UserModel
 {
 	public Guid Id { get; set; }
-	public string FirstName { get; set; }
-	public string LastName { get; set; }
+	public string Name { get; set; }
 	public string UserName { get; set; }
 	public string Email { get; set; }
 	public string Password { get; set; }
@@ -23,8 +22,7 @@ public class UserModel
 	public UserModel(User entity)
 	{
 		Id = entity.Id;
-		FirstName = entity.FirstName;
-		LastName = entity.LastName;
+		Name = entity.Name;
 		UserName = entity.UserName;
 		Email = entity.Email;
 		Password = entity.Password;

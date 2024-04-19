@@ -82,11 +82,8 @@ public class ApplicationUserService(
 
 	private static void Validate(UserRequest request)
 	{
-		if (string.IsNullOrEmpty(request.FirstName))
-			throw new InvalidDataException("Primeiro nome não pode ser vazio");
-
-		if (string.IsNullOrEmpty(request.LastName))
-			throw new InvalidDataException("Sobrenome não pode ser vazio");
+		if (string.IsNullOrEmpty(request.Name))
+			throw new InvalidDataException("Nome não pode ser vazio");
 
 		if (!string.IsNullOrEmpty(request.CPF))
 		{

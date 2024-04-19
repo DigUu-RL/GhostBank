@@ -14,7 +14,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ById(Guid id)
 	{
-		return new ExpressionSpecification<Account>(x => x.Id == id);
+		return new AdHocSpecification<Account>(x => x.Id == id);
 	}
 
 	/// <summary>
@@ -24,7 +24,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByAgency(string agency)
 	{
-		return new ExpressionSpecification<Account>(x => x.Agency == agency);
+		return new AdHocSpecification<Account>(x => x.Agency == agency);
 	}
 
 	/// <summary>
@@ -34,7 +34,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByNumber(string number)
 	{
-		return new ExpressionSpecification<Account>(x => x.Number == number);
+		return new AdHocSpecification<Account>(x => x.Number == number);
 	}
 
 	/// <summary>
@@ -44,7 +44,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByBalance(decimal balance)
 	{
-		return new ExpressionSpecification<Account>(x => x.Balance == balance);
+		return new AdHocSpecification<Account>(x => x.Balance == balance);
 	}
 
 	/// <summary>
@@ -54,7 +54,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByType(AccountType type)
 	{
-		return new ExpressionSpecification<Account>(x => x.Type == type);
+		return new AdHocSpecification<Account>(x => x.Type == type);
 	}
 
 	/// <summary>
@@ -64,7 +64,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByUser(Guid userId)
 	{
-		return new ExpressionSpecification<Account>(x => x.UserId == userId);
+		return new AdHocSpecification<Account>(x => x.UserId == userId);
 	}
 
 	/// <summary>
@@ -74,7 +74,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByPix(Pix pix)
 	{
-		return new ExpressionSpecification<Account>(x => x.Pix.Contains(pix));
+		return new AdHocSpecification<Account>(x => x.Pix.Contains(pix));
 	}
 
 	/// <summary>
@@ -84,7 +84,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByPix(Guid pixId)
 	{
-		return new ExpressionSpecification<Account>(x => x.Pix.Any(y => y.Id == pixId));
+		return new AdHocSpecification<Account>(x => x.Pix.Any(y => y.Id == pixId));
 	}
 
 	/// <summary>
@@ -94,7 +94,7 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByCard(Card card)
 	{
-		return new ExpressionSpecification<Account>(x => x.Cards.Contains(card));
+		return new AdHocSpecification<Account>(x => x.Cards.Contains(card));
 	}
 
 	/// <summary>
@@ -104,6 +104,6 @@ public static class AccountSpecification
 	/// <returns></returns>
 	public static Specification<Account> ByCard(Guid cardId)
 	{
-		return new ExpressionSpecification<Account>(x => x.Cards.Any(y => y.Id == cardId));
+		return new AdHocSpecification<Account>(x => x.Cards.Any(y => y.Id == cardId));
 	}
 }

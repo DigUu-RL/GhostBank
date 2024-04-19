@@ -7,8 +7,7 @@ namespace GhostBank.Domain.Requests.Identity;
 public class UserRequest
 {
 	public Guid? Id { get; set; }
-	public string? FirstName { get; set; }
-	public string? LastName { get; set; }
+	public string? Name { get; set; }
 	public string? CPF { get; set; }
 	public string? CNPJ { get; set; }
 	public string? UserName { get; set; }

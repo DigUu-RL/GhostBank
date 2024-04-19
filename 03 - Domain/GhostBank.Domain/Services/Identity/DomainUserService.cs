@@ -75,8 +75,7 @@ public class DomainUserService(
 	{
 		var user = new User
 		{
-			FirstName = request.FirstName!,
-			LastName = request.LastName!,
+			Name = request.Name!,
 			CPF = request.CPF!,
 			CNPJ = request.CNPJ,
 			UserName = request.UserName!,
@@ -118,12 +117,11 @@ public class DomainUserService(
 
 	public async Task UpdateAsync(UserRequest request)
 	{
-		_userRepository.With(x => x.Include(user => user.Claims));
+		_userRepository.With(x => x.Claims);
 
 		User user = await _userRepository.GetByIdAsync(request.Id.GetValueOrDefault()) ?? throw new NotFoundException("Usuário não encontrado");
 
-		user.FirstName = request.FirstName!;
-		user.LastName = request.LastName!;
+		user.Name = request.Name!;
 		user.UserName = request.UserName!;
 		user.Email = request.Email!;
 		user.Cellphone = request.Cellphone!;
@@ -173,11 +171,8 @@ public class DomainUserService(
 			if (search.Filter.Id.HasValue)
 				specification &= UserSpecification.ById(search.Filter.Id.Value);
 
-			if (!string.IsNullOrEmpty(search.Filter.FirstName))
-				specification &= UserSpecification.ByFirstName(search.Filter.FirstName);
-
-			if (!string.IsNullOrEmpty(search.Filter.LastName))
-				specification &= UserSpecification.ByLastName(search.Filter.LastName);
+			if (!string.IsNullOrEmpty(search.Filter.Name))
+				specification &= UserSpecification.ByName(search.Filter.Name);
 
 			if (!string.IsNullOrEmpty(search.Filter.CPF))
 				specification &= UserSpecification.ByCPF(search.Filter.CPF);

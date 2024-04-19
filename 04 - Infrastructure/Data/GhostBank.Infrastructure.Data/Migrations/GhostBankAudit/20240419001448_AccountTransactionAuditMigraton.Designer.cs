@@ -4,6 +4,7 @@ using GhostBank.Infrastructure.Data.Contexts.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GhostBank.Infrastructure.Data.Migrations.GhostBankAudit
 {
     [DbContext(typeof(GhostBankAuditContext))]
-    partial class GhostBankAuditContextModelSnapshot : ModelSnapshot
+    [Migration("20240419001448_AccountTransactionAuditMigraton")]
+    partial class AccountTransactionAuditMigraton
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

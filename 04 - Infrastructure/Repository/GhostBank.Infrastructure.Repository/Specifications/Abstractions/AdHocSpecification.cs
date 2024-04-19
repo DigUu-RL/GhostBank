@@ -2,7 +2,7 @@
 
 namespace GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 
-public class ExpressionSpecification<T>(Expression<Func<T, bool>> expression) : Specification<T>
+public class AdHocSpecification<T>(Expression<Func<T, bool>> expression) : Specification<T>
 {
 	private readonly Expression<Func<T, bool>> _expression = expression ?? throw new ArgumentNullException(nameof(expression));
 

@@ -8,8 +8,7 @@ namespace GhostBank.Application.DTOs;
 public class UserDTO
 {
 	public Guid Id { get; set; }
-	public string FirstName { get; set; }
-	public string LastName { get; set; }
+	public string Name { get; set; }
 	public string UserName { get; set; }
 	public string Email { get; set; }
 	public string Password { get; set; }
@@ -23,8 +22,7 @@ public class UserDTO
 	public UserDTO(UserModel model)
 	{
 		Id = model.Id;
-		FirstName = model.FirstName;
-		LastName = model.LastName;
+		Name = model.Name;
 		UserName = model.UserName;
 		Email = model.Email;
 		Password = model.Password;

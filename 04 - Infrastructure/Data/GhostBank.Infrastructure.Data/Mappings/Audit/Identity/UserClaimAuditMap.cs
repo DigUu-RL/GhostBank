@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GhostBank.Infrastructure.Data.Mappings.Audit.Identity;
 
-public class UserAuditMap : BaseAuditMap<UserAudit>
+public class UserClaimAuditMap : BaseAuditMap<UserClaimAudit>
 {
-	public override void Configure(EntityTypeBuilder<UserAudit> builder)
+	public override void Configure(EntityTypeBuilder<UserClaimAudit> builder)
 	{
-		builder.ToTable(nameof(UserAudit));
+		builder.ToTable(nameof(UserClaimAudit));
 
 		builder
-			.Property(x => x.UserId)
+			.Property(x => x.UserClaimId)
 			.HasColumnType("UNIQUEIDENTIFIER")
 			.IsRequired();
 

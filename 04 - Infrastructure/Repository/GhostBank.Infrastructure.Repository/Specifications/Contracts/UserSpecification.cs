@@ -7,41 +7,36 @@ public static class UserSpecification
 {
 	public static Specification<User> ById(Guid id)
 	{
-		return new ExpressionSpecification<User>(x => x.Id == id);
+		return new AdHocSpecification<User>(x => x.Id == id);
 	}
 
-	public static Specification<User> ByFirstName(string firstName)
+	public static Specification<User> ByName(string name)
 	{
-		return new ExpressionSpecification<User>(x => x.FirstName.ToLower() == firstName.ToLower());
-	}
-
-	public static Specification<User> ByLastName(string lastName)
-	{
-		return new ExpressionSpecification<User>(x => x.LastName.ToLower() == lastName.ToLower());
+		return new AdHocSpecification<User>(x => x.Name.ToLower() == name.ToLower());
 	}
 
 	public static Specification<User> ByCPF(string cpf)
 	{
-		return new ExpressionSpecification<User>(x => x.CPF == cpf);
+		return new AdHocSpecification<User>(x => x.CPF == cpf);
 	}
 
 	public static Specification<User> ByCNPJ(string cnpj)
 	{
-		return new ExpressionSpecification<User>(x => x.CNPJ == cnpj);
+		return new AdHocSpecification<User>(x => x.CNPJ == cnpj);
 	}
 
 	public static Specification<User> ByUserName(string userName)
 	{
-		return new ExpressionSpecification<User>(x => x.UserName.ToLower() == userName.ToLower());
+		return new AdHocSpecification<User>(x => x.UserName.ToLower() == userName.ToLower());
 	}
 
 	public static Specification<User> ByEmail(string email)
 	{
-		return new ExpressionSpecification<User>(x => x.Email.ToLower() == email.ToLower());
+		return new AdHocSpecification<User>(x => x.Email.ToLower() == email.ToLower());
 	}
 
 	public static Specification<User> ByCellphone(string cellphone)
 	{
-		return new ExpressionSpecification<User>(x => x.Cellphone == cellphone);
+		return new AdHocSpecification<User>(x => x.Cellphone == cellphone);
 	}
 }

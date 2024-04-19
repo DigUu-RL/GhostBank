@@ -1,5 +1,6 @@
 ﻿using GhostBank.Infrastructure.Data.Mappings.Audit.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 
 namespace GhostBank.Infrastructure.Data.Contexts.Audit;
@@ -7,6 +8,8 @@ namespace GhostBank.Infrastructure.Data.Contexts.Audit;
 public class GhostBankAuditContext : DbContext
 {
 	private readonly IConfiguration _configuration;
+
+	public IDbContextTransaction Transaction => Database.CurrentTransaction ?? Database.BeginTransaction();
 
 	public GhostBankAuditContext()
 	{

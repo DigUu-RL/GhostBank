@@ -2,6 +2,7 @@
 using GhostBank.Infrastructure.Data.Mappings.Cards;
 using GhostBank.Infrastructure.Data.Mappings.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 
 namespace GhostBank.Infrastructure.Data.Contexts;
@@ -9,6 +10,8 @@ namespace GhostBank.Infrastructure.Data.Contexts;
 public class GhostBankContext : DbContext
 {
 	private readonly IConfiguration _configuration;
+
+	public IDbContextTransaction Transaction => Database.CurrentTransaction ?? Database.BeginTransaction();
 
 	public GhostBankContext()
 	{
@@ -41,6 +44,8 @@ public class GhostBankContext : DbContext
 		#region BANK
 
 		modelBuilder.ApplyConfiguration(new AccountMap());
+		modelBuilder.ApplyConfiguration(new TransactionMap());
+		modelBuilder.ApplyConfiguration(new AccountTransactionMap());
 		modelBuilder.ApplyConfiguration(new PixMap());
 
 		#endregion

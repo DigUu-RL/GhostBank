@@ -16,13 +16,7 @@ public class UserMap : BaseMap<User>
 			.ValueGeneratedOnAdd();
 
 		builder
-			.Property(x => x.FirstName)
-			.HasColumnType("VARCHAR")
-			.HasMaxLength(255)
-			.IsRequired();
-
-		builder
-			.Property(x => x.LastName)
+			.Property(x => x.Name)
 			.HasColumnType("VARCHAR")
 			.HasMaxLength(255)
 			.IsRequired();
