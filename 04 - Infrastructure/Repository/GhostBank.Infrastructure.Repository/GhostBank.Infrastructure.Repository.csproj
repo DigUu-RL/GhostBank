@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Data\GhostBank.Infrastructure.Data\GhostBank.Infrastructure.Data.csproj" />
   </ItemGroup>
 
