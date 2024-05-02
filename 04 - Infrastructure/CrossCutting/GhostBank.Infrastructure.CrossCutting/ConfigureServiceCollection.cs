@@ -1,10 +1,12 @@
 ﻿using Asp.Versioning;
+using GhostBank.Application.Interface;
 using GhostBank.Application.Interface.Authentication;
 using GhostBank.Application.Interface.Bank;
 using GhostBank.Application.Interface.Identity;
 using GhostBank.Application.Services.Authentication;
 using GhostBank.Application.Services.Bank;
 using GhostBank.Application.Services.Identity;
+using GhostBank.Domain.Interfaces;
 using GhostBank.Domain.Interfaces.Authentication;
 using GhostBank.Domain.Interfaces.Bank;
 using GhostBank.Domain.Interfaces.Identity;
@@ -45,48 +47,48 @@ public static class ConfigureServiceCollection
 
 		services.AddHttpContextAccessor();
 
-		#region AUDIT
+		// audit
+		services.Scan(
+			scan => scan.FromAssembliesOf(typeof(IBaseAuditRepository<>))
+			.AddClasses(classes => classes.AssignableTo(typeof(IBaseAuditRepository<>)))
+			.AsImplementedInterfaces()
+			.WithScopedLifetime()
+		);
 
-		#region IDENTITY
+		// application
+		services.Scan(
+			scan => scan.FromAssembliesOf(typeof(IApplicationServiceBase<,>))
+			.AddClasses(classes => classes.AssignableTo(typeof(IApplicationServiceBase<,>)))
+			.AsImplementedInterfaces()
+			.WithScopedLifetime()
+		);
 
-		services.AddScoped(typeof(IUserAuditRepository), typeof(UserAuditRepository));
+		// domain
+		services.Scan(
+			scan => scan.FromAssembliesOf(typeof(IDomainServiceBase<,>))
+			.AddClasses(classes => classes.AssignableTo(typeof(IDomainServiceBase<,>)))
+			.AsImplementedInterfaces()
+			.WithScopedLifetime()
+		);
 
-		#endregion
+		// repository
+		services.Scan(
+			scan => scan.FromAssembliesOf(typeof(IBaseRepository<>))
+			.AddClasses(classes => classes.AssignableTo(typeof(IBaseRepository<>)))
+			.AsImplementedInterfaces()
+			.WithScopedLifetime()
+		);
 
-		services.AddScoped(typeof(IBaseAuditRepository<>), typeof(BaseAuditRepository<>));
-
-		#endregion
-
-		#region BANK
-
-		services.AddScoped(typeof(IApplicationAccountService), typeof(ApplicationAccountService));
-		services.AddScoped(typeof(IDomainAccountService), typeof(DomainAccountService));
-		services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
-
-		#endregion
-
-		#region IDENTITY
-
-		services.AddScoped(typeof(IApplicationUserService), typeof(ApplicationUserService));
-		services.AddScoped(typeof(IDomainUserService), typeof(DomainUserService));
-		services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
-
-		services.AddScoped(typeof(IUserClaimRepository), typeof(UserClaimRepository));
-
-		#endregion
-
-		#region AUTHENTICATION
-
+		// authentication
 		services.AddScoped(typeof(IApplicationAuthenticationService), typeof(ApplicationAuthenticationService));
 		services.AddScoped(typeof(IDomainAuthenticationService), typeof(DomainAuthenticationService));
 
+		// jwt
 		services.AddScoped(typeof(IApplicationJwtService), typeof(ApplicationJwtService));
 		services.AddScoped(typeof(IDomainJwtService), typeof(DomainJwtService));
 
-		#endregion
-
+		// repository wrapper
 		services.AddScoped(typeof(IRepositoryWrapper), typeof(RepositoryWrapper));
-		services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 		return services;
 	}

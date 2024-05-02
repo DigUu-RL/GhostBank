@@ -6,26 +6,25 @@ using System.Net;
 
 namespace GhostBank.Infrastructure.Middleware;
 
-public class JwtMiddleware(RequestDelegate next, IServiceProvider provider)
+public class JwtMiddleware(RequestDelegate next)
 {
 	private readonly RequestDelegate _next = next ?? throw new ArgumentNullException(nameof(next));
-	private readonly IServiceProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
-	private readonly IDomainJwtService _jwtService = provider.CreateScope().ServiceProvider.GetRequiredService<IDomainJwtService>();
-
-	public async Task InvokeAsync(HttpContext context)
+	public async Task InvokeAsync(HttpContext context, IServiceProvider provider)
 	{
+		IDomainJwtService jwtService = provider.CreateScope().ServiceProvider.GetRequiredService<IDomainJwtService>();
+
 		string? token = context.Request.Headers[nameof(Authorization)].SingleOrDefault();
 
 		if (!string.IsNullOrEmpty(token))
-			await AttachUserAsync(context, token);
+			await AttachUserAsync(context, jwtService, token);
 
 		await _next.Invoke(context);
 	}
 
-	private async Task AttachUserAsync(HttpContext context, string token)
+	private async Task AttachUserAsync(HttpContext context, IDomainJwtService jwtService, string token)
 	{
-		User user = await _jwtService.ValidateTokenAsync(token);
+		User user = await jwtService.ValidateTokenAsync(token);
 		context.Items[nameof(User)] = user;
 	}
 }

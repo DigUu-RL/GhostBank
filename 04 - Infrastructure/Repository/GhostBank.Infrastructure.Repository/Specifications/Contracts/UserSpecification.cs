@@ -12,7 +12,7 @@ public static class UserSpecification
 
 	public static Specification<User> ByName(string name)
 	{
-		return new AdHocSpecification<User>(x => x.Name.ToLower() == name.ToLower());
+		return new AdHocSpecification<User>(x => x.Name == name);
 	}
 
 	public static Specification<User> ByCPF(string cpf)
@@ -27,12 +27,12 @@ public static class UserSpecification
 
 	public static Specification<User> ByUserName(string userName)
 	{
-		return new AdHocSpecification<User>(x => x.UserName.ToLower() == userName.ToLower());
+		return new AdHocSpecification<User>(x => x.UserName == userName);
 	}
 
 	public static Specification<User> ByEmail(string email)
 	{
-		return new AdHocSpecification<User>(x => x.Email.ToLower() == email.ToLower());
+		return new AdHocSpecification<User>(x => x.Email == email);
 	}
 
 	public static Specification<User> ByCellphone(string cellphone)

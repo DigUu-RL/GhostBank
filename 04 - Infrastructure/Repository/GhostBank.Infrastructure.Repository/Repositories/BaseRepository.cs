@@ -43,22 +43,20 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 	public virtual IQueryable<TEntity> Query(Specification<TEntity>? specification = null, bool readOnly = true)
 	{
 		specification ??= new TrueSpecification<TEntity>();
-		specification &= new AdHocSpecification<TEntity>(x => !x.Excluded);
 
 		_query = _query.Where(specification);
-
 		return readOnly ? _query.AsNoTracking() : _query;
 	}
 
 	public virtual async Task<TEntity?> GetByIdAsync(Guid id, bool readOnly = true)
 	{
-		TEntity? entity = await Query(readOnly: readOnly).SingleOrDefaultAsync(x => x.Id == id);
+		TEntity? entity = await Query(readOnly: readOnly).Where(x => !x.Excluded).SingleOrDefaultAsync(x => x.Id == id);
 		return entity;
 	}
 
 	public virtual async Task<List<TEntity>> GetAllAsync(bool readOnly = true)
 	{
-		return await Query(readOnly: readOnly).ToListAsync();
+		return await Query(readOnly: readOnly).Where(x => !x.Excluded).ToListAsync();
 	}
 
 	public virtual async Task<PaginatedList<TEntity>> GetAsync(
@@ -68,7 +66,7 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 		bool readOnly = true
 	)
 	{
-		IQueryable<TEntity> items = Query(specification, readOnly);
+		IQueryable<TEntity> items = Query(specification, readOnly).Where(x => !x.Excluded);
 		return await PaginatedList<TEntity>.CreateInstanceAsync(items, page, quantity);
 	}
 
@@ -79,9 +77,6 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 		bool readOnly = true
 	)
 	{
-		specification ??= new TrueSpecification<TEntity>();
-		specification &= new AdHocSpecification<TEntity>(x => !x.Excluded);
-
 		IQueryable<TEntity> items = Query(specification, readOnly);
 		return await PaginatedList<TEntity>.CreateInstanceAsync(items, page, quantity);
 	}

@@ -12,6 +12,6 @@ public class AndSpecification<T>(Specification<T> left, Specification<T> right) 
 		Expression<Func<T, bool>> left = _left.ToExpression();
 		Expression<Func<T, bool>> right = _right.ToExpression();
 
-		return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left, right), right.Parameters);
+		return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left.Body, right.Body), right.Parameters);
 	}
 }
