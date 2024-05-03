@@ -3,6 +3,7 @@ using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces.Identity;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Models.Identity;
+using GhostBank.Domain.Requests;
 using GhostBank.Domain.Requests.Identity;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Repository.Helpers;
@@ -11,7 +12,6 @@ using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 namespace GhostBank.Domain.Services.Identity;
 
@@ -43,10 +43,18 @@ public class DomainUserService(
 		return users.Select(x => new UserModel(x)).ToList();
 	}
 
-	public async Task<PaginatedListModel<UserModel>> GetAsync(Search<UserRequest> search)
+	public async Task<PaginatedListModel<UserModel>> GetAsync(SearchRequest<UserRequest> request)
 	{
-		Specification<User> specification = GetSpecification(search);
-		PaginatedList<User> result = await _userRepository.GetAsync(search.Page, search.Quantity, specification);
+		Specification<User> specification = GetSpecification(request);
+
+		var search = new Search<User>
+		{
+			Page = request.Page,
+			Quantity = request.Quantity,
+			Specification = specification
+		};
+
+		PaginatedList<User> result = await _userRepository.GetAsync(search);
 
 		return new PaginatedListModel<UserModel>
 		{
@@ -57,10 +65,18 @@ public class DomainUserService(
 		};
 	}
 
-	public async Task<PaginatedListModel<UserModel>> GetWithExcludedAsync(Search<UserRequest> search)
+	public async Task<PaginatedListModel<UserModel>> GetWithExcludedAsync(SearchRequest<UserRequest> request)
 	{
-		Specification<User> specification = GetSpecification(search);
-		PaginatedList<User> result = await _userRepository.GetWithExcludedAsync(search.Page, search.Quantity, specification);
+		Specification<User> specification = GetSpecification(request);
+
+		var search = new Search<User>
+		{
+			Page = request.Page,
+			Quantity = request.Quantity,
+			Specification = specification
+		};
+
+		PaginatedList<User> result = await _userRepository.GetWithExcludedAsync(search);
 
 		return new PaginatedListModel<UserModel>
 		{
@@ -97,7 +113,6 @@ public class DomainUserService(
 		};
 
 		await _userRepository.CreateAsync(user);
-		await _userRepository.CommitAsync();
 
 		var claims = new List<UserClaim>
 		{
@@ -112,6 +127,7 @@ public class DomainUserService(
 		await _userClaimRepository.CreateAsync([.. claims]);
 		await _userClaimRepository.CommitAsync();
 
+		await _userRepository.CommitAsync();
 		await _userRepository.GrantDataBaseAccess(user);
 	}
 
@@ -151,18 +167,19 @@ public class DomainUserService(
 		try
 		{
 			await _userRepository.DeleteAsync(user);
-			await _userRepository.CommitAsync();
 		}
 		catch (Exception)
 		{
 			user.Excluded = true;
-
 			await _userRepository.UpdateAsync(user);
+		}
+		finally
+		{
 			await _userRepository.CommitAsync();
 		}
 	}
 
-	private static Specification<User> GetSpecification(Search<UserRequest> search)
+	private static Specification<User> GetSpecification(SearchRequest<UserRequest> search)
 	{
 		Specification<User> specification = new TrueSpecification<User>();
 

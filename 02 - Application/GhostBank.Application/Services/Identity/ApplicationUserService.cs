@@ -6,6 +6,7 @@ using GhostBank.Domain.Helpers.Extensions;
 using GhostBank.Domain.Interfaces.Identity;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Models.Identity;
+using GhostBank.Domain.Requests;
 using GhostBank.Domain.Requests.Identity;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +37,7 @@ public class ApplicationUserService(
 		return result.Select(x => new UserDTO(x)).ToList();
 	}
 
-	public async Task<PaginatedListDTO<UserDTO>> GetAsync(Search<UserRequest> search)
+	public async Task<PaginatedListDTO<UserDTO>> GetAsync(SearchRequest<UserRequest> search)
 	{
 		PaginatedListModel<UserModel> result = await _userService.GetAsync(search);
 
@@ -49,7 +50,7 @@ public class ApplicationUserService(
 		};
 	}
 
-	public async Task<PaginatedListDTO<UserDTO>> GetWithExcludedAsync(Search<UserRequest> search)
+	public async Task<PaginatedListDTO<UserDTO>> GetWithExcludedAsync(SearchRequest<UserRequest> search)
 	{
 		PaginatedListModel<UserModel> result = await _userService.GetWithExcludedAsync(search);
 

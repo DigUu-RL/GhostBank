@@ -3,7 +3,7 @@ using GhostBank.Application.DTOs;
 using GhostBank.Application.DTOs.Bank;
 using GhostBank.Application.Interface.Bank;
 using GhostBank.Domain.Attributes;
-using GhostBank.Domain.Helpers;
+using GhostBank.Domain.Requests;
 using GhostBank.Domain.Requests.Bank;
 using GhostBank.Web.API.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -33,14 +33,14 @@ public class AccountController(IApplicationAccountService accountService) : Base
 	}
 
 	[HttpGet("list")]
-	public override async Task<IActionResult> Get([FromQuery] Search<AccountRequest> search)
+	public override async Task<IActionResult> Get([FromQuery] SearchRequest<AccountRequest> search)
 	{
 		PaginatedListDTO<AccountDTO> accounts = await _accountService.GetAsync(search);
 		return Ok(accounts);
 	}
 
 	[HttpGet("excluded")]
-	public override async Task<IActionResult> GetWithExcluded([FromQuery] Search<AccountRequest> search)
+	public override async Task<IActionResult> GetWithExcluded([FromQuery] SearchRequest<AccountRequest> search)
 	{
 		PaginatedListDTO<AccountDTO> accounts = await _accountService.GetWithExcludedAsync(search);
 		return Ok(accounts);

@@ -1,31 +1,16 @@
 ﻿using Asp.Versioning;
 using GhostBank.Application.Interface;
 using GhostBank.Application.Interface.Authentication;
-using GhostBank.Application.Interface.Bank;
-using GhostBank.Application.Interface.Identity;
 using GhostBank.Application.Services.Authentication;
-using GhostBank.Application.Services.Bank;
-using GhostBank.Application.Services.Identity;
 using GhostBank.Domain.Interfaces;
 using GhostBank.Domain.Interfaces.Authentication;
-using GhostBank.Domain.Interfaces.Bank;
-using GhostBank.Domain.Interfaces.Identity;
 using GhostBank.Domain.Services.Authentication;
-using GhostBank.Domain.Services.Bank;
-using GhostBank.Domain.Services.Identity;
 using GhostBank.Infrastructure.Data.Contexts;
 using GhostBank.Infrastructure.Data.Contexts.Audit;
 using GhostBank.Infrastructure.Middleware;
 using GhostBank.Infrastructure.Repository.Interfaces;
 using GhostBank.Infrastructure.Repository.Interfaces.Audit;
-using GhostBank.Infrastructure.Repository.Interfaces.Audit.Identity;
-using GhostBank.Infrastructure.Repository.Interfaces.Bank;
-using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using GhostBank.Infrastructure.Repository.Repositories;
-using GhostBank.Infrastructure.Repository.Repositories.Audit;
-using GhostBank.Infrastructure.Repository.Repositories.Audit.Identity;
-using GhostBank.Infrastructure.Repository.Repositories.Bank;
-using GhostBank.Infrastructure.Repository.Repositories.Identity;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -187,7 +172,6 @@ public static class ConfigureServiceCollection
 		{
 			if (!await context.Database.CanConnectAsync())
 				await context.Database.EnsureCreatedAsync();
-
 		}
 
 		return services;

@@ -1,9 +1,9 @@
 ﻿using GhostBank.Domain.Exceptions.Abstractions;
-using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Helpers.Extensions;
 using GhostBank.Domain.Interfaces.Bank;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Models.Bank;
+using GhostBank.Domain.Requests;
 using GhostBank.Domain.Requests.Bank;
 using GhostBank.Infrastructure.Data.Entities.Bank;
 using GhostBank.Infrastructure.Repository.Helpers;
@@ -37,10 +37,18 @@ public class DomainAccountService(IAccountRepository accountRepository) : IDomai
 		return result;
 	}
 
-	public async Task<PaginatedListModel<AccountModel>> GetAsync(Search<AccountRequest> search)
+	public async Task<PaginatedListModel<AccountModel>> GetAsync(SearchRequest<AccountRequest> request)
 	{
-		Specification<Account> specification = GetSpecification(search);
-		PaginatedList<Account> accounts = await _accountRepository.GetAsync(search.Page, search.Quantity, specification);
+		Specification<Account> specification = GetSpecification(request);
+
+		var search = new Search<Account>
+		{
+			Page = request.Page,
+			Quantity = request.Quantity,
+			Specification = specification
+		};
+
+		PaginatedList<Account> accounts = await _accountRepository.GetAsync(search);
 
 		var result = new PaginatedListModel<AccountModel>
 		{
@@ -53,10 +61,18 @@ public class DomainAccountService(IAccountRepository accountRepository) : IDomai
 		return result;
 	}
 
-	public async Task<PaginatedListModel<AccountModel>> GetWithExcludedAsync(Search<AccountRequest> search)
+	public async Task<PaginatedListModel<AccountModel>> GetWithExcludedAsync(SearchRequest<AccountRequest> request)
 	{
-		Specification<Account> specification = GetSpecification(search);
-		PaginatedList<Account> accounts = await _accountRepository.GetWithExcludedAsync(search.Page, search.Quantity, specification);
+		Specification<Account> specification = GetSpecification(request);
+
+		var search = new Search<Account>
+		{
+			Page = request.Page,
+			Quantity = request.Quantity,
+			Specification = specification
+		};
+
+		PaginatedList<Account> accounts = await _accountRepository.GetWithExcludedAsync(search);
 
 		var result = new PaginatedListModel<AccountModel>
 		{
@@ -98,7 +114,7 @@ public class DomainAccountService(IAccountRepository accountRepository) : IDomai
 		await _accountRepository.DeleteAsync(account);
 	}
 
-	private static Specification<Account> GetSpecification(Search<AccountRequest> search)
+	private static Specification<Account> GetSpecification(SearchRequest<AccountRequest> search)
 	{
 		Specification<Account> specification = new TrueSpecification<Account>();
 

@@ -28,6 +28,6 @@ public class UserRepository(GhostBankContext context) : BaseRepository<User>(con
             ALTER ROLE [db_datawriter] ADD MEMBER [{user.Id}.{user.UserName}]
         ";
 
-		await ExecuteSQLAsync(sql);
+		await ExecuteSqlAsync(sql);
 	}
 }

@@ -2,7 +2,7 @@
 using GhostBank.Application.DTOs;
 using GhostBank.Application.Interface.Identity;
 using GhostBank.Domain.Attributes;
-using GhostBank.Domain.Helpers;
+using GhostBank.Domain.Requests;
 using GhostBank.Domain.Requests.Identity;
 using GhostBank.Web.API.Controllers;
 using Microsoft.AspNetCore.Authorization;
@@ -34,14 +34,14 @@ public class UserController(IApplicationUserService userService) : BaseControlle
 	}
 
 	[HttpGet("list")]
-	public override async Task<IActionResult> Get([FromQuery] Search<UserRequest> search)
+	public override async Task<IActionResult> Get([FromQuery] SearchRequest<UserRequest> search)
 	{
 		PaginatedListDTO<UserDTO> users = await _userService.GetAsync(search);
 		return Ok(users);
 	}
 
 	[HttpGet("excluded")]
-	public override async Task<IActionResult> GetWithExcluded([FromQuery] Search<UserRequest> search)
+	public override async Task<IActionResult> GetWithExcluded([FromQuery] SearchRequest<UserRequest> search)
 	{
 		PaginatedListDTO<UserDTO> users = await _userService.GetWithExcludedAsync(search);
 		return Ok(users);

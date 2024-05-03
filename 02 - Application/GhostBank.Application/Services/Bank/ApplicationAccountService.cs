@@ -1,10 +1,10 @@
 ﻿using GhostBank.Application.DTOs;
 using GhostBank.Application.DTOs.Bank;
 using GhostBank.Application.Interface.Bank;
-using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces.Bank;
 using GhostBank.Domain.Models;
 using GhostBank.Domain.Models.Bank;
+using GhostBank.Domain.Requests;
 using GhostBank.Domain.Requests.Bank;
 
 namespace GhostBank.Application.Services.Bank;
@@ -27,7 +27,7 @@ public class ApplicationAccountService(IDomainAccountService accountService) : I
 		return accounts.Select(x => new AccountDTO(x)).ToList();
 	}
 
-	public async Task<PaginatedListDTO<AccountDTO>> GetAsync(Search<AccountRequest> search)
+	public async Task<PaginatedListDTO<AccountDTO>> GetAsync(SearchRequest<AccountRequest> search)
 	{
 		PaginatedListModel<AccountModel> accounts = await _accountService.GetAsync(search);
 
@@ -42,7 +42,7 @@ public class ApplicationAccountService(IDomainAccountService accountService) : I
 		return result;
 	}
 
-	public async Task<PaginatedListDTO<AccountDTO>> GetWithExcludedAsync(Search<AccountRequest> search)
+	public async Task<PaginatedListDTO<AccountDTO>> GetWithExcludedAsync(SearchRequest<AccountRequest> search)
 	{
 		PaginatedListModel<AccountModel> accounts = await _accountService.GetWithExcludedAsync(search);
 

@@ -6,7 +6,6 @@ using GhostBank.Infrastructure.Repository.Specifications;
 using GhostBank.Infrastructure.Repository.Specifications.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 
 namespace GhostBank.Infrastructure.Repository.Repositories;
@@ -14,7 +13,6 @@ namespace GhostBank.Infrastructure.Repository.Repositories;
 public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository<TEntity> where TEntity : EntityBase
 {
 	private readonly GhostBankContext _context = context ?? throw new ArgumentNullException(nameof(context));
-	private readonly IDbContextTransaction _transaction = context.Transaction;
 	private IQueryable<TEntity> _query = context.Set<TEntity>().AsQueryable<TEntity>();
 
 	public void With(params Expression<Func<TEntity, object>>[] properties)
@@ -28,18 +26,12 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 	/// </summary>
 	/// <param name="sql">O SQL que será executado</param>
 	/// <returns></returns>
-	public async Task ExecuteSQLAsync(string sql)
+	public async Task ExecuteSqlAsync(string sql)
 	{
 		DatabaseFacade database = _context.Database;
 		await database.ExecuteSqlRawAsync(sql);
 	}
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="specification"></param>
-	/// <param name="readOnly"></param>
-	/// <returns></returns>
 	public virtual IQueryable<TEntity> Query(Specification<TEntity>? specification = null, bool readOnly = true)
 	{
 		specification ??= new TrueSpecification<TEntity>();
@@ -50,7 +42,7 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 
 	public virtual async Task<TEntity?> GetByIdAsync(Guid id, bool readOnly = true)
 	{
-		TEntity? entity = await Query(readOnly: readOnly).Where(x => !x.Excluded).SingleOrDefaultAsync(x => x.Id == id);
+		TEntity? entity = await Query(readOnly: readOnly).SingleOrDefaultAsync(x => x.Id == id && !x.Excluded);
 		return entity;
 	}
 
@@ -59,26 +51,16 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 		return await Query(readOnly: readOnly).Where(x => !x.Excluded).ToListAsync();
 	}
 
-	public virtual async Task<PaginatedList<TEntity>> GetAsync(
-		int page,
-		int quantity,
-		Specification<TEntity>? specification = null,
-		bool readOnly = true
-	)
+	public virtual async Task<PaginatedList<TEntity>> GetAsync(Search<TEntity> search, bool readOnly = true)
 	{
-		IQueryable<TEntity> items = Query(specification, readOnly).Where(x => !x.Excluded);
-		return await PaginatedList<TEntity>.CreateInstanceAsync(items, page, quantity);
+		IQueryable<TEntity> items = Query(search.Specification, readOnly).Where(x => !x.Excluded);
+		return await PaginatedList<TEntity>.CreateInstanceAsync(items, search.Page, search.Quantity);
 	}
 
-	public virtual async Task<PaginatedList<TEntity>> GetWithExcludedAsync(
-		int page,
-		int quantity,
-		Specification<TEntity>? specification = null,
-		bool readOnly = true
-	)
+	public virtual async Task<PaginatedList<TEntity>> GetWithExcludedAsync(Search<TEntity> search, bool readOnly = true)
 	{
-		IQueryable<TEntity> items = Query(specification, readOnly);
-		return await PaginatedList<TEntity>.CreateInstanceAsync(items, page, quantity);
+		IQueryable<TEntity> items = Query(search.Specification, readOnly);
+		return await PaginatedList<TEntity>.CreateInstanceAsync(items, search.Page, search.Quantity);
 	}
 
 	public virtual async Task CreateAsync(params TEntity[] entities)
@@ -90,15 +72,16 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 		}
 
 		await _context.AddRangeAsync(entities);
+		await _context.SaveChangesAsync();
 	}
 
-	public virtual Task UpdateAsync(params TEntity[] entities)
+	public virtual async Task UpdateAsync(params TEntity[] entities)
 	{
 		foreach (TEntity entity in entities)
 			entity.LastUpdate = DateTime.UtcNow;
 
 		_context.UpdateRange(entities);
-		return Task.CompletedTask;
+		await _context.SaveChangesAsync();
 	}
 
 	public virtual async Task CreateOrUpdateAsync(params TEntity[] entities)
@@ -113,19 +96,19 @@ public class BaseRepository<TEntity>(GhostBankContext context) : IBaseRepository
 			await UpdateAsync(updateEntities);
 	}
 
-	public virtual Task DeleteAsync(params TEntity[] entities)
+	public virtual async Task DeleteAsync(params TEntity[] entities)
 	{
 		_context.RemoveRange(entities);
-		return Task.CompletedTask;
+		await _context.SaveChangesAsync();
 	}
 
 	public virtual async Task CommitAsync()
 	{
-		await _transaction.CommitAsync();
+		await _context.Transaction.CommitAsync();
 	}
 
 	public virtual async Task RollbackAsync()
 	{
-		await _transaction.RollbackAsync();
+		await _context.Transaction.RollbackAsync();
 	}
 }

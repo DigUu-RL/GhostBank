@@ -4,9 +4,9 @@ namespace GhostBank.Infrastructure.Repository.Helpers;
 
 public sealed class PaginatedList<T> : List<T>
 {
-	public int Page { get; set; }
-	public int Pages { get; set; }
-	public int Total { get; set; }
+	public int Page { get; }
+	public int Pages { get; }
+	public int Total { get; }
 
 	private PaginatedList(IEnumerable<T> items, int page, int quantity, int total)
 	{

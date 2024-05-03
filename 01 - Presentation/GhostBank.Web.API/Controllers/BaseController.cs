@@ -1,4 +1,4 @@
-﻿using GhostBank.Domain.Helpers;
+﻿using GhostBank.Domain.Requests;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +14,10 @@ public abstract class BaseController<TRequest> : Controller where TRequest : cla
 	public virtual Task<IActionResult> GetById(Guid id) => throw new NotImplementedException("Recurso ainda não implementado");
 	public virtual Task<IActionResult> GetAll() => throw new NotImplementedException("Recurso ainda não implementado");
 
-	public virtual Task<IActionResult> Get([FromQuery] Search<TRequest> search) =>
+	public virtual Task<IActionResult> Get([FromQuery] SearchRequest<TRequest> search) =>
 		throw new NotImplementedException("Recurso ainda não implementado");
 
-	public virtual Task<IActionResult> GetWithExcluded([FromQuery] Search<TRequest> search) =>
+	public virtual Task<IActionResult> GetWithExcluded([FromQuery] SearchRequest<TRequest> search) =>
 		throw new NotImplementedException("Recurso ainda não implementado");
 
 	public virtual Task<IActionResult> Create([FromBody] TRequest request) => throw new NotImplementedException("Recurso ainda não implementado");
