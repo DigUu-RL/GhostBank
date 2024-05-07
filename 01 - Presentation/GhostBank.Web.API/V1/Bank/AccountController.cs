@@ -13,8 +13,8 @@ namespace GhostBank.Web.API.V1.Bank;
 [Authorize]
 [ApiController]
 [ApiVersion(1)]
-[Route("api/[controller]/")]
-public class AccountController(IApplicationAccountService accountService) : BaseController<AccountRequest>
+[Route("api/bank/[controller]/")]
+public class AccountController(IApplicationAccountService accountService) : GhostBankController<AccountRequest>
 {
 	private readonly IApplicationAccountService _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
 

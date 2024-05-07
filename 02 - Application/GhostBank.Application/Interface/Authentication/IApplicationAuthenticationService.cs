@@ -1,11 +1,13 @@
-﻿using GhostBank.Application.DTOs.Authentication;
+﻿using GhostBank.Application.DTOs;
+using GhostBank.Application.DTOs.Authentication;
 using GhostBank.Domain.Requests.Authentication;
+using GhostBank.Domain.Requests.Identity;
 using Microsoft.AspNetCore.Http;
 
 namespace GhostBank.Application.Interface.Authentication;
 
 public interface IApplicationAuthenticationService
 {
-	Task<Guid> GetUserAsync(SignInRequest request);
-	Task<AccessTokenDTO> AuthenticateAsync(SignInRequest request, HttpContext context);
+	Task<UserRequest> GetUserAsync(SignInRequest request);
+	Task<AccessTokenDTO> AuthenticateAsync(UserRequest request, HttpContext context);
 }

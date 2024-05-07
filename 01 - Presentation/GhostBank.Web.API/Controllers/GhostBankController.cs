@@ -4,12 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GhostBank.Web.API.Controllers;
 
-public abstract class BaseController<TRequest> : Controller where TRequest : class
+public abstract class GhostBankController<TRequest> : Controller where TRequest : class
 {
-	protected new User User
-	{
-		get => HttpContext.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException();
-	}
+	protected new User User => HttpContext.Items[nameof(User)] as User ?? throw new UnauthorizedAccessException();
 
 	public virtual Task<IActionResult> GetById(Guid id) => throw new NotImplementedException("Recurso ainda não implementado");
 	public virtual Task<IActionResult> GetAll() => throw new NotImplementedException("Recurso ainda não implementado");

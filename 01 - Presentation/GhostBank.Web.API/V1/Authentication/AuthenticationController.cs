@@ -3,6 +3,7 @@ using GhostBank.Application.DTOs;
 using GhostBank.Application.DTOs.Authentication;
 using GhostBank.Application.Interface.Authentication;
 using GhostBank.Domain.Requests.Authentication;
+using GhostBank.Domain.Requests.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -25,14 +26,12 @@ public class AuthenticationController(
 
 	private readonly IApplicationJwtService _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
 
-	[HttpPost("signin")]
+	[HttpPost("sign-in")]
 	public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
 	{
-		Guid userId = await _authenticationService.GetUserAsync(request);
+		UserRequest result = await _authenticationService.GetUserAsync(request);
 
-		request.UserId = userId;
-
-		AccessTokenDTO token = await _authenticationService.AuthenticateAsync(request, HttpContext);
+		AccessTokenDTO token = await _authenticationService.AuthenticateAsync(result, HttpContext);
 		return Ok(token);
 	}
 

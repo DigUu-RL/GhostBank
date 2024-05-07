@@ -3,6 +3,7 @@ using GhostBank.Application.Interface.Authentication;
 using GhostBank.Domain.Interfaces.Authentication;
 using GhostBank.Domain.Models.Authentication;
 using GhostBank.Domain.Requests.Authentication;
+using GhostBank.Domain.Requests.Identity;
 using Microsoft.AspNetCore.Http;
 using InvalidDataException = GhostBank.Domain.Exceptions.Abstractions.InvalidDataException;
 
@@ -12,7 +13,7 @@ public class ApplicationAuthenticationService(IDomainAuthenticationService authe
 {
 	private readonly IDomainAuthenticationService _authenticationService = authenticationService;
 
-	public async Task<AccessTokenDTO> AuthenticateAsync(SignInRequest request, HttpContext context)
+	public async Task<AccessTokenDTO> AuthenticateAsync(UserRequest request, HttpContext context)
 	{
 		AccessTokenModel model = await _authenticationService.AuthenticateAsync(request, context);
 
@@ -25,7 +26,7 @@ public class ApplicationAuthenticationService(IDomainAuthenticationService authe
 		return accessToken;
 	}
 
-	public async Task<Guid> GetUserAsync(SignInRequest request)
+	public async Task<UserRequest> GetUserAsync(SignInRequest request)
 	{
 		if (string.IsNullOrEmpty(request.Login))
 			throw new InvalidDataException("Login do usuário não é válido");
@@ -33,7 +34,7 @@ public class ApplicationAuthenticationService(IDomainAuthenticationService authe
 		if (string.IsNullOrEmpty(request.Password))
 			throw new InvalidDataException("Senha do usuário não é válida");
 
-		Guid userId = await _authenticationService.GetUserAsync(request);
-		return userId;
+		UserRequest result = await _authenticationService.GetUserAsync(request);
+		return result;
 	}
 }

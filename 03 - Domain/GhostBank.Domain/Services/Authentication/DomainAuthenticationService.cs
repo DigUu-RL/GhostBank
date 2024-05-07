@@ -2,7 +2,9 @@
 using GhostBank.Domain.Helpers;
 using GhostBank.Domain.Interfaces.Authentication;
 using GhostBank.Domain.Models.Authentication;
+using GhostBank.Domain.Models.Identity;
 using GhostBank.Domain.Requests.Authentication;
+using GhostBank.Domain.Requests.Identity;
 using GhostBank.Infrastructure.Data.Entities.Identity;
 using GhostBank.Infrastructure.Repository.Interfaces.Identity;
 using GhostBank.Infrastructure.Repository.Specifications.Contracts;
@@ -19,11 +21,11 @@ public class DomainAuthenticationService(IDomainJwtService jwtService, IUserRepo
 	private readonly IDomainJwtService _jwtService = jwtService ?? throw new ArgumentNullException(nameof(jwtService));
 	private readonly IUserRepository _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
 
-	public async Task<AccessTokenModel> AuthenticateAsync(SignInRequest request, HttpContext context)
+	public async Task<AccessTokenModel> AuthenticateAsync(UserRequest request, HttpContext context)
 	{
 		_userRepository.With(x => x.Claims);
 
-		User user = await _userRepository.GetByIdAsync(request.UserId) ??
+		User user = await _userRepository.GetByIdAsync(request.Id.GetValueOrDefault()) ??
 			throw new NotFoundException("Usuário não encontrado");
 
 		AccessTokenModel token = _jwtService.GenerateToken(user);
@@ -34,7 +36,7 @@ public class DomainAuthenticationService(IDomainJwtService jwtService, IUserRepo
 		return token;
 	}
 
-	public async Task<Guid> GetUserAsync(SignInRequest request)
+	public async Task<UserRequest> GetUserAsync(SignInRequest request)
 	{
 		User? user = await _userRepository.Query(UserSpecification.ByEmail(request.Login!)).SingleOrDefaultAsync();
 		user ??= await _userRepository.Query(UserSpecification.ByUserName(request.Login!)).SingleOrDefaultAsync();
@@ -44,9 +46,14 @@ public class DomainAuthenticationService(IDomainJwtService jwtService, IUserRepo
 
 		string hash = await Util.CreateHashAsync(request.Password!);
 
-		if (user.Password != hash)
+		if (!user.Password.Equals(hash))
 			throw new CannotProcessException("As senhas não correspondem", HttpStatusCode.Forbidden);
 
-		return user.Id;
+		var result = new UserRequest
+		{
+			Id = user.Id
+		};
+
+		return result;
 	}
 }

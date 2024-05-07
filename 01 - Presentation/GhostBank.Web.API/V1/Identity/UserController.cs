@@ -1,11 +1,9 @@
 ﻿using Asp.Versioning;
 using GhostBank.Application.DTOs;
 using GhostBank.Application.Interface.Identity;
-using GhostBank.Domain.Attributes;
 using GhostBank.Domain.Requests;
 using GhostBank.Domain.Requests.Identity;
 using GhostBank.Web.API.Controllers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AuthorizeAttribute = GhostBank.Domain.Attributes.AuthorizeAttribute;
 
@@ -14,8 +12,8 @@ namespace GhostBank.Web.API.V1.Identity;
 [Authorize]
 [ApiController]
 [ApiVersion(1)]
-[Route("api/[controller]/")]
-public class UserController(IApplicationUserService userService) : BaseController<UserRequest>
+[Route("api/identity/[controller]/")]
+public class UserController(IApplicationUserService userService) : GhostBankController<UserRequest>
 {
 	private readonly IApplicationUserService _userService = userService;
 
